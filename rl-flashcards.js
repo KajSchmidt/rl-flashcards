@@ -3,6 +3,10 @@ class RLFlashcards {
         this.data = new modelJSON(this);
         this.view = new viewCardline(this);
     }
+
+    init() {
+
+    }
 }
 
 class modelJSON {
@@ -22,15 +26,16 @@ class viewCardline {
         this.controller = controller;
     }
 
-    loadDeck() {
+    loadDeck(deck) {
+        deck.forEach(this.loadSection);
 
     }
 
-    loadSection() {
-
+    loadSection(section, section_index) {
+        section.questions.forEach(this.loadQuestion);
     } 
 
-    loadQuestion() {
-        
+    loadQuestion(question, question_index, section_index) {
+
     }
 }
