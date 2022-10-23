@@ -15,7 +15,7 @@ class modelJSON {
         this.store = {
             "settings":{},
             "user": {},
-            "deck": {}
+            "deck": []
         }
     }
 
@@ -31,15 +31,21 @@ class viewCardline {
     }
 
     loadDeck(deck) {
-        deck.forEach(this.loadSection);
-
+        console.log("deck");
+        for (let [index, section] of deck.entries()) {
+            this.loadSection(section, index)
+        }
     }
 
     loadSection(section, section_index) {
-        section.questions.forEach(this.loadQuestion);
+        console.log("s"+ section_index);
+        for (let [index, question] of section.questions.entries()) {
+            this.loadQuestion(question, index, section_index)
+        }
     } 
 
     loadQuestion(question, question_index, section_index) {
+        console.log("q"+ question_index);
 
     }
 }
