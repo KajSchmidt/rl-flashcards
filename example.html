@@ -19,6 +19,18 @@
 
             app = new RLFlashcards();
 
+            app.data.addSection({
+                "title":"section1",
+                "qestions":[
+                    {"title":"Question1",
+                    "correct_answer":["aswer1"],
+                    "wrong_answer":["answer2","answer3","answer4"]
+                    }
+                ]
+            });
+
+            app.init();
+
         </script>
     </body>
 </html>

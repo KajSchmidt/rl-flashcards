@@ -19,6 +19,10 @@ class modelJSON {
         }
     }
 
+    addSection(section) {
+        this.store.deck.push(section);
+    }    
+
 }
 
 class viewCardline {
