@@ -5,7 +5,7 @@ class RLFlashcards {
     }
 
     init() {
-
+        this.view.loadDeck(this.data.store.deck);
     }
 }
 
@@ -51,7 +51,7 @@ class viewCardline {
         let modal_id = "s" + section_index + "q" + question_index;
 
         let modal = document.createElement("div");
-        modal.classList.add("modal");
+        modal.classList.add("modal", "fade");
         modal.setAttribute("id", modal_id);
 
         let modal_dialog = document.createElement("div");
@@ -67,6 +67,23 @@ class viewCardline {
         
         let modal_body= document.createElement("div");
         modal_body.classList.add("modal-body");
+
+        let modal_buttons= document.createElement("div");
+        modal_buttons.classList.add("modal-body","list-group");
+
+        for (let answer of question.correct_answer) {
+            let button = document.createElement("button");
+            button.classList.add("btn", "btn-primary", "list-group-item");
+            button.innerHTML = answer;
+            modal_buttons.append(button);
+        }
+
+        for (let answer of question.wrong_answer) {
+            let button = document.createElement("button");
+            button.classList.add("btn", "btn-primary");
+            button.innerHTML = answer;
+            modal_body.append(button);
+        }
         
         let modal_footer = document.createElement("div");
         modal_footer.classList.add("modal-footer");
@@ -78,9 +95,14 @@ class viewCardline {
         modal.append(modal_dialog);
 
         this.site.body.append(modal);
-        
+
 
         return modal_id;
 
+    }
+
+    openQuestion(id) {
+        let modal = new bootstrap.Modal("#"+id);
+        modal.show();
     }
 }
