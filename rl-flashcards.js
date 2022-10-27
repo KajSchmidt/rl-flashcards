@@ -81,7 +81,8 @@ class viewCardline {
         
         let modal_btn_start = document.createElement("button");
         modal_btn_start.classList.add("btn", "btn-primary");
-        modal_btn_start.onclick = event => this.openQuestion("s0q0", "site_greeting");
+        modal_btn_start.onclick = event => this.openQuestion("s0", modal_id);
+        modal_btn_start.innerHTML = "Start"
         modal_footer.append(modal_btn_start);
 
 
@@ -118,10 +119,18 @@ class viewCardline {
         
         let modal_body= document.createElement("div");
         modal_body.classList.add("modal-body");
-        modal_body.innerHTML=settings.fail;
+        modal_body.innerHTML= settings.fail;
 
         let modal_footer = document.createElement("div");
         modal_footer.classList.add("modal-footer");
+
+        let modal_btn_start = document.createElement("button");
+        modal_btn_start.classList.add("btn", "btn-primary");
+        modal_btn_start.onclick = event => this.openQuestion("s0", modal_id);
+        modal_btn_start.innerHTML = "Start"
+        modal_footer.append(modal_btn_start);
+        
+        
 
         modal_content.append(modal_header);
         modal_content.append(modal_body);
@@ -180,10 +189,50 @@ class viewCardline {
     }
 
     buildSection(section, section_index, settings) {
-        //console.log("s"+ section_index);
+        
+        let modal_id = "s" + section_index;
+
+        let modal = document.createElement("div");
+        modal.classList.add("modal", "fade");
+        modal.setAttribute("id", modal_id);
+
+        let modal_dialog = document.createElement("div");
+        modal_dialog.classList.add("modal-dialog","modal-dialog-centered");
+        
+
+        let modal_content = document.createElement("div");
+        modal_content.classList.add("modal-content");
+        
+        
+        let modal_header = document.createElement("div");
+        modal_header.classList.add("modal-header");
+        
+        let modal_body= document.createElement("div");
+        modal_body.classList.add("modal-body");
+        modal_body.innerHTML= "Sektion " + section_index;
+
+        let modal_footer = document.createElement("div");
+        modal_footer.classList.add("modal-footer");
+        let modal_btn_start = document.createElement("button");
+        modal_btn_start.classList.add("btn", "btn-primary");
+        modal_btn_start.onclick = event => this.openQuestion("s"+ section_index +"q0", modal_id );
+        modal_btn_start.innerHTML = "Start"
+        modal_footer.append(modal_btn_start);
+
+        modal_content.append(modal_header);
+        modal_content.append(modal_body);
+        modal_content.append(modal_footer);
+        modal_dialog.append(modal_content);
+        modal.append(modal_dialog);
+
+        this.site.body.append(modal);
+        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:'static'});
+        
         for (let [index, question] of section.questions.entries()) {
             this.buildQuestion(question, index, section_index)
         }
+
+        return modal_id;
     } 
 
     buildQuestion(question, question_index, section_index, settings) {
@@ -214,6 +263,8 @@ class viewCardline {
             let button = document.createElement("button");
             button.classList.add("list-group-item");
             button.innerHTML = answer;
+            question_index++;
+            button.onclick = event => this.openQuestion("s"+ section_index +"q"+ question_index,modal_id);
             modal_buttons.append(button);
         }
 
@@ -221,6 +272,7 @@ class viewCardline {
             let button = document.createElement("button");
             button.classList.add("list-group-item");
             button.innerHTML = answer;
+            button.onclick = event => this.openFail(modal_id);
             modal_buttons.append(button);
         }
 
