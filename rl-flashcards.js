@@ -18,6 +18,8 @@ class modelJSON {
             "settings":{
                 "title":"Titel",
                 "greeting":"Välkommen",
+                "fail":"Tyvärr!",
+                "done":"Grattis!",
                 "restart_at":"section"
             },
             "user": {},
@@ -46,22 +48,128 @@ class viewCardline {
 
 
     buildSite(deck, settings) {
-        this.buildGreetings(settings);
+        this.buildGreeting(settings);
         this.buildFail(settings);
         this.buildDone(settings);
         this.buildDeck(deck, settings);
     }
 
-    buildGreeting() {
+    buildGreeting(settings) {
+        let modal_id = "site_greeting";
+
+        let modal = document.createElement("div");
+        modal.classList.add("modal", "fade");
+        modal.setAttribute("id", modal_id);
+
+        let modal_dialog = document.createElement("div");
+        modal_dialog.classList.add("modal-dialog","modal-dialog-centered");
+        
+
+        let modal_content = document.createElement("div");
+        modal_content.classList.add("modal-content");
+        
+        
+        let modal_header = document.createElement("div");
+        modal_header.classList.add("modal-header");
+        
+        let modal_body= document.createElement("div");
+        modal_body.classList.add("modal-body");
+        modal_body.innerHTML=settings.greeting;
+
+        let modal_footer = document.createElement("div");
+        modal_footer.classList.add("modal-footer");
+        
+        let modal_btn_start = document.createElement("button");
+        modal_btn_start.classList.add("btn", "btn-primary");
+        modal_btn_start.onclick = event => this.openQuestion("s0q0", "site_greeting");
+        modal_footer.append(modal_btn_start);
+
+
+        modal_content.append(modal_header);
+        modal_content.append(modal_body);
+        modal_content.append(modal_footer);
+        modal_dialog.append(modal_content);
+        modal.append(modal_dialog);
+
+        this.site.body.append(modal);
+        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:'static'});
+
+        return modal_id;
 
     }
 
-    buildFail() {
+    buildFail(settings) {
+        let modal_id = "site_fail";
 
+        let modal = document.createElement("div");
+        modal.classList.add("modal", "fade");
+        modal.setAttribute("id", modal_id);
+
+        let modal_dialog = document.createElement("div");
+        modal_dialog.classList.add("modal-dialog","modal-dialog-centered");
+        
+
+        let modal_content = document.createElement("div");
+        modal_content.classList.add("modal-content");
+        
+        
+        let modal_header = document.createElement("div");
+        modal_header.classList.add("modal-header");
+        
+        let modal_body= document.createElement("div");
+        modal_body.classList.add("modal-body");
+        modal_body.innerHTML=settings.fail;
+
+        let modal_footer = document.createElement("div");
+        modal_footer.classList.add("modal-footer");
+
+        modal_content.append(modal_header);
+        modal_content.append(modal_body);
+        modal_content.append(modal_footer);
+        modal_dialog.append(modal_content);
+        modal.append(modal_dialog);
+
+        this.site.body.append(modal);
+        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:'static'});
+
+        return modal_id;
     }
 
-    buildDone() {
+    buildDone(settings) {
+        let modal_id = "site_done";
 
+        let modal = document.createElement("div");
+        modal.classList.add("modal", "fade");
+        modal.setAttribute("id", modal_id);
+
+        let modal_dialog = document.createElement("div");
+        modal_dialog.classList.add("modal-dialog","modal-dialog-centered");
+        
+
+        let modal_content = document.createElement("div");
+        modal_content.classList.add("modal-content");
+        
+        
+        let modal_header = document.createElement("div");
+        modal_header.classList.add("modal-header");
+        
+        let modal_body= document.createElement("div");
+        modal_body.classList.add("modal-body");
+        modal_body.innerHTML=settings.done;
+
+        let modal_footer = document.createElement("div");
+        modal_footer.classList.add("modal-footer");
+
+        modal_content.append(modal_header);
+        modal_content.append(modal_body);
+        modal_content.append(modal_footer);
+        modal_dialog.append(modal_content);
+        modal.append(modal_dialog);
+
+        this.site.body.append(modal);
+        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:'static'});
+
+        return modal_id;
     }
 
     buildDeck(deck, settings) {
@@ -86,7 +194,7 @@ class viewCardline {
         modal.setAttribute("id", modal_id);
 
         let modal_dialog = document.createElement("div");
-        modal_dialog.classList.add("modal-dialog");
+        modal_dialog.classList.add("modal-dialog","modal-dialog-centered");
         
 
         let modal_content = document.createElement("div");
@@ -129,29 +237,44 @@ class viewCardline {
         modal.append(modal_dialog);
 
         this.site.body.append(modal);
-        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id);
+        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:'static'});
 
         return modal_id;
 
     }
 
-    openGreeting() {
-
+    openGreeting(close_id) {
+        if (close_id) {
+            this.site.modals[close_id].hide();
+        }
+        this.site.modals["site_greeting"].show();
     }
 
-    openSection() {
-
-    }
-
-    openQuestion(modal_id) {
+    openSection(modal_id, close_id) {
+        if (close_id) {
+            this.site.modals[close_id].hide();
+        }
         this.site.modals[modal_id].show();
     }
 
-    openFail() {
-
+    openQuestion(modal_id, close_id) {
+        if (close_id) {
+            this.site.modals[close_id].hide();
+        }
+        this.site.modals[modal_id].show();
     }
 
-    openDone() {
+    openFail(close_id) {
+        if (close_id) {
+            this.site.modals[close_id].hide();
+        }
+        this.site.modals["site_fail"].show();
+    }
 
+    openDone(close_id) {
+        if (close_id) {
+            this.site.modals[close_id].hide();
+        }
+        this.site.modals["site_done"].show();
     }
 }
