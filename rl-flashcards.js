@@ -218,12 +218,12 @@ class viewCardline {
         let modal_header = document.createElement("div");
         modal_header.classList.add("modal-header");
         let modal_header_title = document.createElement("h5");
-        modal_header_title.innerHTML = section.title;
+        modal_header_title.innerHTML = section.title || "";
         modal_header.append(modal_header_title);
         
         let modal_body= document.createElement("div");
         modal_body.classList.add("modal-body");
-        modal_body.innerHTML= section.text;
+        modal_body.innerHTML= section.text || "";
 
         let modal_footer = document.createElement("div");
         modal_footer.classList.add("modal-footer");
@@ -280,12 +280,12 @@ class viewCardline {
         let modal_header = document.createElement("div");
         modal_header.classList.add("modal-header");
         let modal_header_title = document.createElement("h5");
-        modal_header_title.innerHTML = question.title;
+        modal_header_title.innerHTML = question.title || ""; 
         modal_header.append(modal_header_title);
         
         let modal_body= document.createElement("div");
         modal_body.classList.add("modal-body");
-        modal_body.innerHTML = question.text;
+        modal_body.innerHTML = question.text || "";
 
         let modal_buttons= document.createElement("div");
         modal_buttons.classList.add("list-group", "list-group-flush");
