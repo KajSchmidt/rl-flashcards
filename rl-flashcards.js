@@ -290,6 +290,8 @@ class viewCardline {
         let modal_buttons= document.createElement("div");
         modal_buttons.classList.add("list-group", "list-group-flush");
 
+        let button_array = [];
+
         for (let answer of question.correct_answer) {
             let button = document.createElement("button");
             button.classList.add("list-group-item");
@@ -304,7 +306,7 @@ class viewCardline {
             else {
                 button.onclick = event => this.openQuestion(next_index,modal_id);
             }
-            modal_buttons.append(button);
+            button_array.push(button); 
         }
 
         for (let answer of question.wrong_answer) {
@@ -312,10 +314,13 @@ class viewCardline {
             button.classList.add("list-group-item");
             button.innerHTML = answer;
             button.onclick = event => this.openFail(modal_id);
-            modal_buttons.append(button);
+            button_array.push(button); 
         }
 
-
+        button_array = button_array.sort((a, b) => 0.5 - Math.random());
+        for (let button of button_array) {
+            modal_buttons.append(button);
+        }
         
         let modal_footer = document.createElement("div");
         modal_footer.classList.add("modal-footer");
