@@ -28,6 +28,10 @@ class modelJSON {
     }
 
     loadData() {
+        for (let section of this.store.deck) {
+            section.last_question = section.questions.length-1;
+            section.last_section = this.store.deck.length-1;
+        }
 
     }
 
@@ -169,6 +173,12 @@ class viewCardline {
         let modal_footer = document.createElement("div");
         modal_footer.classList.add("modal-footer");
 
+        let modal_btn_start = document.createElement("button");
+        modal_btn_start.classList.add("btn", "btn-primary");
+        modal_btn_start.onclick = event => this.openQuestion("s0", modal_id);
+        modal_btn_start.innerHTML = "Start"
+        modal_footer.append(modal_btn_start);
+
         modal_content.append(modal_header);
         modal_content.append(modal_body);
         modal_content.append(modal_footer);
@@ -229,13 +239,26 @@ class viewCardline {
         this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:false});
         
         for (let [index, question] of section.questions.entries()) {
-            this.buildQuestion(question, index, section_index)
+            if (index == section.last_question) {
+                if (section_index == section.last_section) {
+                    this.buildQuestion(question, index, section_index,"site_done", settings);
+                }
+                else {
+                    let next_section = section_index + 1;
+                    this.buildQuestion(question, index, section_index,"s" + next_section, settings);
+                }
+            }
+            else {
+                let question_index = index + 1;
+                this.buildQuestion(question, index, section_index,"s"+section_index+"q"+question_index, settings);
+            }
+            
         }
 
         return modal_id;
     } 
 
-    buildQuestion(question, question_index, section_index, settings) {
+    buildQuestion(question, question_index, section_index, next_index, settings) {
         let modal_id = "s" + section_index + "q" + question_index;
 
         let modal = document.createElement("div");
@@ -263,8 +286,16 @@ class viewCardline {
             let button = document.createElement("button");
             button.classList.add("list-group-item");
             button.innerHTML = answer;
-            question_index++;
-            button.onclick = event => this.openQuestion("s"+ section_index +"q"+ question_index,modal_id);
+            if (next_index == "site_done") {
+                button.onclick = event => this.openDone(modal_id);
+            }
+            else if (next_index.length < 4) {
+                button.onclick = event => this.openSection(next_index,modal_id);
+            }
+
+            else {
+                button.onclick = event => this.openQuestion(next_index,modal_id);
+            }
             modal_buttons.append(button);
         }
 
