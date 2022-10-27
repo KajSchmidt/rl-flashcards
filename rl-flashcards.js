@@ -93,7 +93,7 @@ class viewCardline {
         modal.append(modal_dialog);
 
         this.site.body.append(modal);
-        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:'static'});
+        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:false});
 
         return modal_id;
 
@@ -139,7 +139,7 @@ class viewCardline {
         modal.append(modal_dialog);
 
         this.site.body.append(modal);
-        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:'static'});
+        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:false});
 
         return modal_id;
     }
@@ -176,7 +176,7 @@ class viewCardline {
         modal.append(modal_dialog);
 
         this.site.body.append(modal);
-        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:'static'});
+        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:false});
 
         return modal_id;
     }
@@ -226,7 +226,7 @@ class viewCardline {
         modal.append(modal_dialog);
 
         this.site.body.append(modal);
-        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:'static'});
+        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:false});
         
         for (let [index, question] of section.questions.entries()) {
             this.buildQuestion(question, index, section_index)
@@ -289,7 +289,7 @@ class viewCardline {
         modal.append(modal_dialog);
 
         this.site.body.append(modal);
-        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:'static'});
+        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:false});
 
         return modal_id;
 
@@ -301,7 +301,7 @@ class viewCardline {
         }
         this.site.modals["site_greeting"].show();
     }
-
+m
     openSection(modal_id, close_id) {
         if (close_id) {
             this.site.modals[close_id].hide();
