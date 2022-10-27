@@ -116,18 +116,18 @@ class viewCardline {
         
 
         let modal_content = document.createElement("div");
-        modal_content.classList.add("modal-content");
+        modal_content.classList.add("modal-content","text-bg-danger");
         
         
         let modal_header = document.createElement("div");
-        modal_header.classList.add("modal-header");
+        modal_header.classList.add("modal-header","text-bg-danger");
         
         let modal_body= document.createElement("div");
-        modal_body.classList.add("modal-body");
+        modal_body.classList.add("modal-body","text-bg-danger");
         modal_body.innerHTML= settings.fail;
 
         let modal_footer = document.createElement("div");
-        modal_footer.classList.add("modal-footer");
+        modal_footer.classList.add("modal-footer","text-bg-danger");
 
         let modal_btn_start = document.createElement("button");
         modal_btn_start.classList.add("btn", "btn-primary");
