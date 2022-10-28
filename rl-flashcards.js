@@ -36,6 +36,12 @@ class modelJSON {
 
     }
 
+    shuffleQuestions() {
+        for (let section of this.store.deck) {
+            section.questions = section.questions.sort((a, b) => 0.5 - Math.random());
+        }
+    }
+
     addSection(section) {
         this.store.deck.push(section);
     }    
@@ -204,7 +210,7 @@ class viewCardline {
         let modal_id = "s" + section_index;
 
         let modal = document.createElement("div");
-        modal.classList.add("modal", "fade");
+        modal.classList.add("modal", "fade","deck");
         modal.setAttribute("id", modal_id);
 
         let modal_dialog = document.createElement("div");
@@ -266,7 +272,7 @@ class viewCardline {
         let modal_id = "s" + section_index + "q" + question_index;
 
         let modal = document.createElement("div");
-        modal.classList.add("modal", "fade");
+        modal.classList.add("modal", "fade","deck");
         modal.setAttribute("id", modal_id);
 
         let modal_dialog = document.createElement("div");
@@ -364,6 +370,10 @@ m
         if (close_id) {
             this.site.modals[close_id].hide();
         }
+        
+        this.controller.data.shuffleQuestions();
+        this.destroyDeck();
+        this.buildDeck(this.controller.data.store.deck, this.controller.data.store.settings);
         this.site.modals["site_fail"].show();
     }
 
@@ -372,5 +382,14 @@ m
             this.site.modals[close_id].hide();
         }
         this.site.modals["site_done"].show();
+    }
+
+
+
+
+    destroyDeck() {
+        for (let card of document.querySelectorAll(".deck")) {
+            card.remove();
+        }
     }
 }
