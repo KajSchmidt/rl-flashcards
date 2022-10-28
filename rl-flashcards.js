@@ -2,12 +2,25 @@ class RLFlashcards {
     constructor() {
         this.data = new modelJSON(this);
         this.view = new viewCardline(this);
+        this.time = Date.now();
     }
 
     init() {
         this.data.loadData();
         this.view.buildSite(this.data.store.deck, this.data.store.settings);
         this.view.openGreeting();
+    }
+
+    getTime() {
+        let to_time = Date.now();
+
+        let since_time = new Date (to_time - this.time);
+
+        return since_time;
+    }
+
+    setTime() {
+        this.time = Date.now();
     }
 }
 
@@ -55,6 +68,8 @@ class viewCardline {
         this.site.body = document.querySelector("body");
         this.site.container = document.querySelector(".rl_flashcards");
         this.site.modals = {};
+        this.site.timer = "";
+        this.timer = "";
     }
 
 
@@ -69,7 +84,12 @@ class viewCardline {
         this.buildFail(settings);
         this.buildDone(settings);
         this.buildDeck(deck, settings);
+        this.buildTimer();
     }
+
+/*************
+ *  Bygger Modals
+ * ********* */   
 
     buildGreeting(settings) {  //Bygger första modal som öppnas när sidan öppnas
         let modal_id = "site_greeting";
@@ -98,7 +118,7 @@ class viewCardline {
         
         let modal_btn_start = document.createElement("button");
         modal_btn_start.classList.add("btn", "btn-primary");
-        modal_btn_start.onclick = event => this.openQuestion("s0", modal_id);
+        modal_btn_start.onclick = event => { this.startTimer(); this.openQuestion("s0", modal_id)};
         modal_btn_start.innerHTML = "Start"
         modal_footer.append(modal_btn_start);
 
@@ -350,6 +370,22 @@ class viewCardline {
 
     }
 
+/*************
+ *  Bygger övriga element
+ * ********* */   
+    buildTimer() {
+        let timer = document.createElement("div");
+        timer.classList.add("text-bg-primary");
+        timer.setAttribute("id", "timer");
+        timer.innerHTML = 0;
+
+        this.site.timer = timer;
+
+        this.site.body.append(timer);
+    }
+
+
+
 
 /**************************
  * 
@@ -379,6 +415,7 @@ class viewCardline {
     }
 
     openFail(close_id) { //Körs när fel svar ges
+        this.stopTimer();
         if (close_id) {
             this.site.modals[close_id].hide();
         }
@@ -390,6 +427,7 @@ class viewCardline {
     }
 
     openDone(close_id) { //Körs vid alla rätta svar
+        this.stopTimer();
         if (close_id) {
             this.site.modals[close_id].hide();
         }
@@ -399,13 +437,38 @@ class viewCardline {
 
 /**************************
  * 
- *  
+ *  Funktioner för att styra tidsräknaren
  * 
  * ********************** */ 
 
-    destroyDeck() {
+    startTimer() {
+        this.controller.setTime();
+        this.timer = setInterval(this.updateTimer, 100,this);
+    }
+
+    updateTimer(scope) {
+        let time = scope.controller.getTime().getTime() / 1000;
+        scope.site.timer.innerHTML = time;
+    }
+
+    stopTimer() {
+        clearInterval(this.timer);
+    }
+
+    resumeTimer() {
+        this.timer = setInterval(this.updateTimer, 100,this);
+    }
+
+/**************************
+ * 
+ *  Övriga funktioner
+ * 
+ * ********************** */ 
+
+    destroyDeck() { //Raderar alla element med klassen deck
         for (let card of document.querySelectorAll(".deck")) {
             card.remove();
         }
     }
+
 }
