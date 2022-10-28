@@ -58,14 +58,20 @@ class viewCardline {
     }
 
 
-    buildSite(deck, settings) {
+/**************************
+ * 
+ *  Funtioner för att bygga HTML-element
+ * 
+ * ********************** */    
+
+    buildSite(deck, settings) { //Meta som anropar de andra byggfunktionerna i ordning
         this.buildGreeting(settings);
         this.buildFail(settings);
         this.buildDone(settings);
         this.buildDeck(deck, settings);
     }
 
-    buildGreeting(settings) {
+    buildGreeting(settings) {  //Bygger första modal som öppnas när sidan öppnas
         let modal_id = "site_greeting";
 
         let modal = document.createElement("div");
@@ -110,7 +116,7 @@ class viewCardline {
 
     }
 
-    buildFail(settings) {
+    buildFail(settings) { //Bygger modal som visas vid fel svar
         let modal_id = "site_fail";
 
         let modal = document.createElement("div");
@@ -155,7 +161,7 @@ class viewCardline {
         return modal_id;
     }
 
-    buildDone(settings) {
+    buildDone(settings) { //Bygger modal som visas vid alla rätt svar
         let modal_id = "site_done";
 
         let modal = document.createElement("div");
@@ -198,14 +204,13 @@ class viewCardline {
         return modal_id;
     }
 
-    buildDeck(deck, settings) {
-        //console.log("deck");
+    buildDeck(deck, settings) { //Metafunktion som anropar byggfunktioner för alla sections
         for (let [index, section] of deck.entries()) {
             this.buildSection(section, index)
         }
     }
 
-    buildSection(section, section_index, settings) {
+    buildSection(section, section_index, settings) { //Bygger första modal för varje section + anropar byggfunktionen för varje fråga
         
         let modal_id = "s" + section_index;
 
@@ -268,7 +273,7 @@ class viewCardline {
         return modal_id;
     } 
 
-    buildQuestion(question, question_index, section_index, next_index, settings) {
+    buildQuestion(question, question_index, section_index, next_index, settings) { //Bygger modal för varje fråga
         let modal_id = "s" + section_index + "q" + question_index;
 
         let modal = document.createElement("div");
@@ -345,28 +350,35 @@ class viewCardline {
 
     }
 
-    openGreeting(close_id) {
+
+/**************************
+ * 
+ *  Funtioner för att öppna Modals
+ * 
+ * ********************** */ 
+
+    openGreeting(close_id) { //Körs när sidan laddas
         if (close_id) {
             this.site.modals[close_id].hide();
         }
         this.site.modals["site_greeting"].show();
     }
-m
-    openSection(modal_id, close_id) {
+
+    openSection(modal_id, close_id) { //Körs när en ny section börjar
         if (close_id) {
             this.site.modals[close_id].hide();
         }
         this.site.modals[modal_id].show();
     }
 
-    openQuestion(modal_id, close_id) {
+    openQuestion(modal_id, close_id) { //Körs när en ny fråga öpnar
         if (close_id) {
             this.site.modals[close_id].hide();
         }
         this.site.modals[modal_id].show();
     }
 
-    openFail(close_id) {
+    openFail(close_id) { //Körs när fel svar ges
         if (close_id) {
             this.site.modals[close_id].hide();
         }
@@ -377,7 +389,7 @@ m
         this.site.modals["site_fail"].show();
     }
 
-    openDone(close_id) {
+    openDone(close_id) { //Körs vid alla rätta svar
         if (close_id) {
             this.site.modals[close_id].hide();
         }
@@ -385,7 +397,11 @@ m
     }
 
 
-
+/**************************
+ * 
+ *  
+ * 
+ * ********************** */ 
 
     destroyDeck() {
         for (let card of document.querySelectorAll(".deck")) {
