@@ -68,8 +68,8 @@ class viewCardline {
         this.site.body = document.querySelector("body");
         this.site.container = document.querySelector(".rl_flashcards");
         this.site.modals = {};
-        this.site.timer = "";
-        this.timer = "";
+        this.site.toast;
+        this.site.toasts = {}
     }
 
 
@@ -84,6 +84,7 @@ class viewCardline {
         this.buildFail(settings);
         this.buildDone(settings);
         this.buildDeck(deck, settings);
+        this.buildToasts();
         this.buildTimer();
     }
 
@@ -108,24 +109,25 @@ class viewCardline {
         
         let modal_header = document.createElement("div");
         modal_header.classList.add("modal-header");
+        modal_header.innerHTML=settings.title;
+        modal_content.append(modal_header);
         
         let modal_body= document.createElement("div");
         modal_body.classList.add("modal-body");
         modal_body.innerHTML=settings.greeting;
+        modal_content.append(modal_body);
 
         let modal_footer = document.createElement("div");
         modal_footer.classList.add("modal-footer");
         
         let modal_btn_start = document.createElement("button");
         modal_btn_start.classList.add("btn", "btn-primary");
-        modal_btn_start.onclick = event => { this.startTimer(); this.openQuestion("s0", modal_id)};
+        modal_btn_start.onclick = event => { this.startTimer(); this.site.toasts.timer.show(); this.openSection("s0", modal_id)};
         modal_btn_start.innerHTML = "Start"
         modal_footer.append(modal_btn_start);
 
-
-        modal_content.append(modal_header);
-        modal_content.append(modal_body);
         modal_content.append(modal_footer);
+      
         modal_dialog.append(modal_content);
         modal.append(modal_dialog);
 
@@ -163,8 +165,8 @@ class viewCardline {
 
         let modal_btn_start = document.createElement("button");
         modal_btn_start.classList.add("btn", "btn-primary");
-        modal_btn_start.onclick = event => this.openQuestion("s0", modal_id);
-        modal_btn_start.innerHTML = "Start"
+        modal_btn_start.setAttribute("id","restart_button");
+        modal_btn_start.innerHTML = "Försök igen"
         modal_footer.append(modal_btn_start);
         
         
@@ -231,7 +233,6 @@ class viewCardline {
     }
 
     buildSection(section, section_index, settings) { //Bygger första modal för varje section + anropar byggfunktionen för varje fråga
-        
         let modal_id = "s" + section_index;
 
         let modal = document.createElement("div");
@@ -260,7 +261,7 @@ class viewCardline {
         modal_footer.classList.add("modal-footer");
         let modal_btn_start = document.createElement("button");
         modal_btn_start.classList.add("btn", "btn-primary");
-        modal_btn_start.onclick = event => this.openQuestion("s"+ section_index +"q0", modal_id );
+        modal_btn_start.onclick = event => {this.openQuestion("s"+ section_index +"q0", modal_id );};
         modal_btn_start.innerHTML = "Start"
         modal_footer.append(modal_btn_start);
 
@@ -344,7 +345,7 @@ class viewCardline {
             let button = document.createElement("button");
             button.classList.add("list-group-item");
             button.innerHTML = answer;
-            button.onclick = event => this.openFail(modal_id);
+            button.onclick = event => this.openFail("s"+ section_index,modal_id);
             button_array.push(button); 
         }
 
@@ -373,15 +374,34 @@ class viewCardline {
 /*************
  *  Bygger övriga element
  * ********* */   
+
+    buildToasts() {
+        let toasts = document.createElement("div");
+        toasts.classList.add("toast-container","position-fixed", "bottom-0", "end-0","p-3");
+        toasts.setAttribute("id", "toasts")
+
+        this.site.body.append(toasts);
+        this.site.toast = toasts;
+
+    }
+
     buildTimer() {
         let timer = document.createElement("div");
-        timer.classList.add("text-bg-primary");
+        timer.classList.add("toast");
         timer.setAttribute("id", "timer");
-        timer.innerHTML = 0;
 
-        this.site.timer = timer;
+        let timer_header = document.createElement("div");
+        timer_header.classList.add("toast-header");
 
-        this.site.body.append(timer);
+        let timer_body = document.createElement("div");
+        timer_body.classList.add("toast-body");
+
+        timer.append(timer_header);
+        timer.append(timer_body);
+
+        this.site.toast.append(timer);
+        this.site.toasts.timer = new bootstrap.Toast("#timer", {autohide:false});
+ 
     }
 
 
@@ -401,6 +421,7 @@ class viewCardline {
     }
 
     openSection(modal_id, close_id) { //Körs när en ny section börjar
+        
         if (close_id) {
             this.site.modals[close_id].hide();
         }
@@ -408,17 +429,20 @@ class viewCardline {
     }
 
     openQuestion(modal_id, close_id) { //Körs när en ny fråga öpnar
+        
+
         if (close_id) {
             this.site.modals[close_id].hide();
         }
         this.site.modals[modal_id].show();
     }
 
-    openFail(close_id) { //Körs när fel svar ges
-        this.stopTimer();
+    openFail(next_index, close_id) { //Körs när fel svar ges
         if (close_id) {
             this.site.modals[close_id].hide();
         }
+
+        document.querySelector("#restart_button").onclick = event => this.openSection(next_index, "site_fail");
         
         this.controller.data.shuffleQuestions();
         this.destroyDeck();
@@ -447,8 +471,8 @@ class viewCardline {
     }
 
     updateTimer(scope) {
-        let time = scope.controller.getTime().getTime() / 1000;
-        scope.site.timer.innerHTML = time;
+        let time = scope.controller.getTime().getSeconds();
+        document.querySelector("#timer > .toast-body").innerHTML = "Sekunder: "+ time;
     }
 
     stopTimer() {
