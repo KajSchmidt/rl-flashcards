@@ -104,29 +104,30 @@ class viewCardline {
         
 
         let modal_content = document.createElement("div");
-        modal_content.classList.add("modal-content");
+        modal_content.classList.add("modal-content","shadow");
         
-        
-        let modal_header = document.createElement("div");
-        modal_header.classList.add("modal-header");
-        modal_header.innerHTML=settings.title;
-        modal_content.append(modal_header);
+        if (settings.title) {
+            let modal_header = document.createElement("div");
+            modal_header.classList.add("modal-header");
+            modal_header.innerHTML=settings.title;
+            modal_content.append(modal_header);
+        }
+
         
         let modal_body= document.createElement("div");
         modal_body.classList.add("modal-body");
         modal_body.innerHTML=settings.greeting;
         modal_content.append(modal_body);
 
-        let modal_footer = document.createElement("div");
-        modal_footer.classList.add("modal-footer");
+        let modal_buttons= document.createElement("div");
+        modal_buttons.classList.add("list-group", "list-group-flush");
+        let button = document.createElement("button");
+        button.classList.add("list-group-item","list-group-item-action","list-group-item-success","text-center");
+        button.innerHTML = "Starta testet";
+        button.onclick = event => { this.startTimer(); this.site.toasts.timer.show(); this.openSection("s0", modal_id)};
+        modal_buttons.append(button);
+        modal_content.append(modal_buttons);
         
-        let modal_btn_start = document.createElement("button");
-        modal_btn_start.classList.add("btn", "btn-primary");
-        modal_btn_start.onclick = event => { this.startTimer(); this.site.toasts.timer.show(); this.openSection("s0", modal_id)};
-        modal_btn_start.innerHTML = "Start"
-        modal_footer.append(modal_btn_start);
-
-        modal_content.append(modal_footer);
       
         modal_dialog.append(modal_content);
         modal.append(modal_dialog);
@@ -150,30 +151,24 @@ class viewCardline {
         
 
         let modal_content = document.createElement("div");
-        modal_content.classList.add("modal-content","text-bg-danger");
+        modal_content.classList.add("modal-content","shadow","text-bg-danger");
         
-        
-        let modal_header = document.createElement("div");
-        modal_header.classList.add("modal-header","text-bg-danger");
         
         let modal_body= document.createElement("div");
         modal_body.classList.add("modal-body","text-bg-danger");
-        modal_body.innerHTML= settings.fail;
-
-        let modal_footer = document.createElement("div");
-        modal_footer.classList.add("modal-footer","text-bg-danger");
-
-        let modal_btn_start = document.createElement("button");
-        modal_btn_start.classList.add("btn", "btn-primary");
-        modal_btn_start.setAttribute("id","restart_button");
-        modal_btn_start.innerHTML = "Försök igen"
-        modal_footer.append(modal_btn_start);
-        
-        
-
-        modal_content.append(modal_header);
+        modal_body.innerHTML= settings.fail || "";
         modal_content.append(modal_body);
-        modal_content.append(modal_footer);
+
+        let modal_buttons= document.createElement("div");
+        modal_buttons.classList.add("list-group", "list-group-flush");
+        let button = document.createElement("button");
+        button.classList.add("list-group-item","list-group-item-action","list-group-item-danger","text-center");
+        button.setAttribute("id","restart_button");
+        button.innerHTML = "Försök igen";
+        modal_buttons.append(button);
+        modal_content.append(modal_buttons);
+                
+
         modal_dialog.append(modal_content);
         modal.append(modal_dialog);
 
@@ -195,28 +190,25 @@ class viewCardline {
         
 
         let modal_content = document.createElement("div");
-        modal_content.classList.add("modal-content");
+        modal_content.classList.add("modal-content","shadow","text-bg-success");
         
-        
-        let modal_header = document.createElement("div");
-        modal_header.classList.add("modal-header");
         
         let modal_body= document.createElement("div");
         modal_body.classList.add("modal-body");
-        modal_body.innerHTML=settings.done;
-
-        let modal_footer = document.createElement("div");
-        modal_footer.classList.add("modal-footer");
-
-        let modal_btn_start = document.createElement("button");
-        modal_btn_start.classList.add("btn", "btn-primary");
-        modal_btn_start.onclick = event => this.openQuestion("s0", modal_id);
-        modal_btn_start.innerHTML = "Start"
-        modal_footer.append(modal_btn_start);
-
-        modal_content.append(modal_header);
+        modal_body.innerHTML=settings.done || "";
         modal_content.append(modal_body);
-        modal_content.append(modal_footer);
+
+ /*       let modal_buttons= document.createElement("div");
+        modal_buttons.classList.add("list-group", "list-group-flush");
+        let button = document.createElement("button");
+        button.classList.add("list-group-item","list-group-item-action","list-group-item-primary","text-center");
+        button.innerHTML = "Starta frågorna";
+        button.onclick = event => this.openSection("s0", modal_id);
+        modal_buttons.append(button);
+        modal_content.append(modal_buttons);
+*/
+
+
         modal_dialog.append(modal_content);
         modal.append(modal_dialog);
 
@@ -244,30 +236,34 @@ class viewCardline {
         
 
         let modal_content = document.createElement("div");
-        modal_content.classList.add("modal-content");
+        modal_content.classList.add("modal-content","shadow");
         
-        
-        let modal_header = document.createElement("div");
-        modal_header.classList.add("modal-header");
-        let modal_header_title = document.createElement("h5");
-        modal_header_title.innerHTML = section.title || "";
-        modal_header.append(modal_header_title);
+        if (section.title) {
+            let modal_header = document.createElement("div");
+            modal_header.classList.add("modal-header");
+            let modal_header_title = document.createElement("h5");
+            modal_header_title.innerHTML = section.title;
+            modal_header.append(modal_header_title);
+
+            modal_content.append(modal_header);
+        }
+
         
         let modal_body= document.createElement("div");
         modal_body.classList.add("modal-body");
         modal_body.innerHTML= section.text || "";
-
-        let modal_footer = document.createElement("div");
-        modal_footer.classList.add("modal-footer");
-        let modal_btn_start = document.createElement("button");
-        modal_btn_start.classList.add("btn", "btn-primary");
-        modal_btn_start.onclick = event => {this.openQuestion("s"+ section_index +"q0", modal_id );};
-        modal_btn_start.innerHTML = "Start"
-        modal_footer.append(modal_btn_start);
-
-        modal_content.append(modal_header);
         modal_content.append(modal_body);
-        modal_content.append(modal_footer);
+
+        let modal_buttons= document.createElement("div");
+        modal_buttons.classList.add("list-group", "list-group-flush");
+        let button = document.createElement("button");
+        button.classList.add("list-group-item","list-group-item-action","list-group-item-success","text-center");
+        button.innerHTML = "Starta frågorna";
+        button.onclick = event => {this.openQuestion("s"+ section_index +"q0", modal_id );};
+        modal_buttons.append(button);
+        modal_content.append(modal_buttons);
+       
+        
         modal_dialog.append(modal_content);
         modal.append(modal_dialog);
 
@@ -306,15 +302,18 @@ class viewCardline {
         
 
         let modal_content = document.createElement("div");
-        modal_content.classList.add("modal-content");
+        modal_content.classList.add("modal-content","shadow");
         
-        
-        let modal_header = document.createElement("div");
-        modal_header.classList.add("modal-header");
-        let modal_header_title = document.createElement("h5");
-        modal_header_title.innerHTML = question.title || ""; 
-        modal_header.append(modal_header_title);
-        
+        if (question.title) {
+            let modal_header = document.createElement("div");
+            modal_header.classList.add("modal-header");
+            let modal_header_title = document.createElement("h5");
+            modal_header_title.innerHTML = question.title ; 
+            modal_header.append(modal_header_title);
+
+            modal_content.append(modal_header);
+        }
+
         let modal_body= document.createElement("div");
         modal_body.classList.add("modal-body");
         modal_body.innerHTML = question.text || "";
@@ -326,7 +325,7 @@ class viewCardline {
 
         for (let answer of question.correct_answer) {
             let button = document.createElement("button");
-            button.classList.add("list-group-item");
+            button.classList.add("list-group-item","list-group-item-action","list-group-item-primary","text-center");
             button.innerHTML = answer;
             if (next_index == "site_done") {
                 button.onclick = event => this.openDone(modal_id);
@@ -343,7 +342,7 @@ class viewCardline {
 
         for (let answer of question.wrong_answer) {
             let button = document.createElement("button");
-            button.classList.add("list-group-item");
+            button.classList.add("list-group-item","list-group-item-action","list-group-item-primary","text-center");
             button.innerHTML = answer;
             button.onclick = event => this.openFail("s"+ section_index,modal_id);
             button_array.push(button); 
@@ -354,13 +353,10 @@ class viewCardline {
             modal_buttons.append(button);
         }
         
-        let modal_footer = document.createElement("div");
-        modal_footer.classList.add("modal-footer");
-
-        modal_content.append(modal_header);
+        
         modal_content.append(modal_body);
         modal_content.append(modal_buttons);
-        modal_content.append(modal_footer);
+        
         modal_dialog.append(modal_content);
         modal.append(modal_dialog);
 
@@ -375,7 +371,7 @@ class viewCardline {
  *  Bygger övriga element
  * ********* */   
 
-    buildToasts() {
+    buildToasts() { //Bygger en container för toasts
         let toasts = document.createElement("div");
         toasts.classList.add("toast-container","position-fixed", "bottom-0", "end-0","p-3");
         toasts.setAttribute("id", "toasts")
@@ -387,11 +383,12 @@ class viewCardline {
 
     buildTimer() {
         let timer = document.createElement("div");
-        timer.classList.add("toast");
+        timer.classList.add("toast","shadow");
         timer.setAttribute("id", "timer");
 
         let timer_header = document.createElement("div");
         timer_header.classList.add("toast-header");
+        timer_header.innerHTML = "TID";
 
         let timer_body = document.createElement("div");
         timer_body.classList.add("toast-body");
@@ -472,7 +469,7 @@ class viewCardline {
 
     updateTimer(scope) {
         let time = scope.controller.getTime().getSeconds();
-        document.querySelector("#timer > .toast-body").innerHTML = "Sekunder: "+ time;
+        document.querySelector("#timer > .toast-body").innerHTML = time;
     }
 
     stopTimer() {
