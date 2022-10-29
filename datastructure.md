@@ -45,8 +45,7 @@ Modal setup: {
 Toast setup: {
     "id":"",
     "title":"",
-    "image":"",
     "text":"",
     "type":""
-    "autohide":""
+    "options":{}
 }

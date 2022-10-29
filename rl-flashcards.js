@@ -2,7 +2,7 @@ class RLFlashcards {
     constructor() {
         this.data = new modelJSON(this);
         this.view = new viewCardline(this);
-        this.time = Date.now();
+        this.time = 0;
     }
 
     init() {
@@ -11,16 +11,24 @@ class RLFlashcards {
         this.view.openGreeting();
     }
 
-    getTime() {
-        let to_time = Date.now();
-
-        let since_time = new Date (to_time - this.time);
-
-        return since_time;
+    startTime() {
+        this.timer = setInterval(this.updateTime, 1000, this);
     }
 
-    setTime() {
-        this.time = Date.now();
+    updateTime(scope) {
+        scope.time++;
+    }
+
+    stopTime() {
+        clearInterval(this.timer);
+    }
+
+    getTime() {
+        return this.time;
+    }
+
+    setTime(new_time) {
+        this.time = new_time;
     }
 }
 
@@ -436,21 +444,28 @@ class viewCardline {
  * ********************** */ 
 
     startTimer() {
-        this.controller.setTime();
+        this.controller.startTime();
         this.timer = setInterval(this.updateTimer, 100,this);
     }
 
     updateTimer(scope) {
-        let time = scope.controller.getTime().getSeconds();
+        let time = scope.controller.getTime();
         document.querySelector("#timer > .toast-body").innerHTML = time;
     }
 
     stopTimer() {
         clearInterval(this.timer);
+        this.controller.stopTime();
     }
 
     resumeTimer() {
         this.timer = setInterval(this.updateTimer, 100,this);
+        this.controller.startTime();
+    }
+
+    resetTimer() {
+        this.controller.setTime(0);
+        document.querySelector("#timer > .toast-body").innerHTML = 0;
     }
 
 /**************************
