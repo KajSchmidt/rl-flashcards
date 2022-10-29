@@ -95,3 +95,43 @@
     }
 
 
+    buildFail(settings) { //Bygger modal som visas vid fel svar
+        let modal_id = "site_fail";
+
+        let modal = document.createElement("div");
+        modal.classList.add("modal", "fade");
+        modal.setAttribute("id", modal_id);
+
+        let modal_dialog = document.createElement("div");
+        modal_dialog.classList.add("modal-dialog","modal-dialog-centered");
+        
+
+        let modal_content = document.createElement("div");
+        modal_content.classList.add("modal-content","shadow","text-bg-danger");
+        
+        
+        let modal_body= document.createElement("div");
+        modal_body.classList.add("modal-body","text-bg-danger");
+        modal_body.innerHTML= settings.fail || "";
+        modal_content.append(modal_body);
+
+        let modal_buttons= document.createElement("div");
+        modal_buttons.classList.add("list-group", "list-group-flush");
+        let button = document.createElement("button");
+        button.classList.add("list-group-item","list-group-item-action","list-group-item-danger","text-center");
+        button.setAttribute("id","restart_button");
+        button.innerHTML = "Försök igen";
+        modal_buttons.append(button);
+        modal_content.append(modal_buttons);
+                
+
+        modal_dialog.append(modal_content);
+        modal.append(modal_dialog);
+
+        this.site.body.append(modal);
+        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:false});
+
+        return modal_id;
+    }
+
+

@@ -7,7 +7,7 @@ class RLFlashcards {
 
     init() {
         this.data.loadData();
-        this.view.buildSite(this.data.store.deck, this.data.store.settings);
+        this.view.buildSite(this.data.getDeck(), this.data.getSettings());
         this.view.openGreeting();
     }
 
@@ -29,7 +29,7 @@ class modelJSON {
         this.controller = controller;
         this.store = {
             "settings":{},
-            "user":{},
+            "user":{"active_section":""},
             "deck": []
         }
     }
@@ -57,11 +57,42 @@ class modelJSON {
         this.store.settings = new_settings;
     }
 
+    getUser(target) {
+        if (target) {
+            return this.store.user[target];
+        }
+        else {
+            return this.store.user;
+        }
+    }
+
+    getDeck() {
+        return this.store.deck;
+    }
+
+    getSettings(target) {
+        if (target) {
+            return this.store.settings[target];
+        }
+        else {
+            return this.store.settings;
+        }
+    }
+
+    setUser(target, value) {
+        this.store.user[target] = value;
+    }
+
+    setSetting(target, value) {
+        this.store.settings[target] = value;
+    }
+
 }
 
 class viewCardline {
     constructor(controller) {
         this.controller = controller;
+        this.data = controller.data;
         this.site= {};
         this.site.body = document.querySelector("body");
         this.site.container = document.querySelector(".rl_flashcards");
@@ -93,14 +124,26 @@ class viewCardline {
         this.buildModal(setup);
 
         setup = {
+            "id":"site_fail",
+            "text":settings.fail,
+            "type":"danger",
+            "buttons":[
+                {
+                    "text":"Försök igen",
+                    "type":"danger",
+                    "action": () => { this.restartSection() }
+                }
+            ]
+        };
+        this.buildModal(setup);
+
+
+        setup = {
             "id":"site_done",
             "text":settings.done,
             "type":"success"
         };
         this.buildModal(setup);
-
-
-        this.buildFail(settings);
 
         this.buildDeck(deck, settings);
         this.buildToasts();
@@ -168,47 +211,6 @@ class viewCardline {
         this.site.body.append(modal);
         this.site.modals[setup.id] = new bootstrap.Modal("#"+ setup.id, {backdrop:false});
     }
-
-
-    buildFail(settings) { //Bygger modal som visas vid fel svar
-        let modal_id = "site_fail";
-
-        let modal = document.createElement("div");
-        modal.classList.add("modal", "fade");
-        modal.setAttribute("id", modal_id);
-
-        let modal_dialog = document.createElement("div");
-        modal_dialog.classList.add("modal-dialog","modal-dialog-centered");
-        
-
-        let modal_content = document.createElement("div");
-        modal_content.classList.add("modal-content","shadow","text-bg-danger");
-        
-        
-        let modal_body= document.createElement("div");
-        modal_body.classList.add("modal-body","text-bg-danger");
-        modal_body.innerHTML= settings.fail || "";
-        modal_content.append(modal_body);
-
-        let modal_buttons= document.createElement("div");
-        modal_buttons.classList.add("list-group", "list-group-flush");
-        let button = document.createElement("button");
-        button.classList.add("list-group-item","list-group-item-action","list-group-item-danger","text-center");
-        button.setAttribute("id","restart_button");
-        button.innerHTML = "Försök igen";
-        modal_buttons.append(button);
-        modal_content.append(modal_buttons);
-                
-
-        modal_dialog.append(modal_content);
-        modal.append(modal_dialog);
-
-        this.site.body.append(modal);
-        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:false});
-
-        return modal_id;
-    }
-
 
 
     buildDeck(deck, settings) { //Metafunktion som anropar byggfunktioner för alla sections
@@ -428,19 +430,22 @@ class viewCardline {
     }
 
     openSection(modal_id, close_id) { //Körs när en ny section börjar
-        
         if (close_id) {
             this.site.modals[close_id].hide();
         }
+
+        this.data.setUser("active_section", modal_id);
+
         this.site.modals[modal_id].show();
     }
 
     openQuestion(modal_id, close_id) { //Körs när en ny fråga öpnar
-        
-
         if (close_id) {
             this.site.modals[close_id].hide();
         }
+
+
+
         this.site.modals[modal_id].show();
     }
 
@@ -448,13 +453,15 @@ class viewCardline {
         if (close_id) {
             this.site.modals[close_id].hide();
         }
-
-        document.querySelector("#restart_button").onclick = event => this.openSection(next_index, "site_fail");
         
         this.controller.data.shuffleQuestions();
         this.destroyDeck();
         this.buildDeck(this.controller.data.store.deck, this.controller.data.store.settings);
         this.site.modals["site_fail"].show();
+    }
+
+    restartSection() {
+        this.openSection(this.data.getUser("active_section"), "site_fail");
     }
 
     openDone(close_id) { //Körs vid alla rätta svar

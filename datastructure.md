@@ -6,7 +6,9 @@ store: {
         "fail":"",
         "done":""
     }
-    user: {}
+    user: {
+        "active_section":""
+    }
     deck: [
         {
             "title": "",
