@@ -158,7 +158,8 @@ class viewCardline {
 
         setup = {
             "id":"timer",
-            "title":"TID"
+            "title":"TID",
+            "options":{autohide:false}
         };
         this.buildToast(setup);
     }
@@ -360,14 +361,13 @@ class viewCardline {
 
         let toast_body = document.createElement("div");
         toast_body.classList.add("toast-body");
-
-        
+        toast_body.innerHTML = setup.text;
         toast.append(toast_body);
 
-        if (!setup.autohide) { setup.autohide = true; }
-
         this.site.toast.append(toast);
-        this.site.toasts[setup.id] = new bootstrap.Toast("#"+ setup.id, {autohide:setup.autohide});
+        this.site.toasts[setup.id] = new bootstrap.Toast("#"+ setup.id, setup.options);
+
+        return this.site.toasts[setup.id];
     }
 
     
