@@ -1,6 +1,7 @@
 store: {
     settings: {
         "title":"",
+        "image":"",
         "greeting":"",
         "fail":"",
         "done":""
@@ -10,6 +11,7 @@ store: {
         {
             "title": "",
             "text": "",
+            "image":"",
             "questions": [
                 {
                     "title:"",

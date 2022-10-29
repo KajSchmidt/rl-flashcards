@@ -111,6 +111,14 @@ class viewCardline {
             modal_content.append(modal_header);
         }
 
+        if (settings.image) {
+            let modal_image  = document.createElement("img");
+            modal_image.classList.add("card-img");
+            modal_image.setAttribute("src",settings.image);
+            
+            modal_content.append(modal_image);
+        }
+
         
         let modal_body= document.createElement("div");
         modal_body.classList.add("modal-body");
@@ -246,6 +254,15 @@ class viewCardline {
             modal_content.append(modal_header);
         }
 
+
+        if (section.image) {
+            let modal_image  = document.createElement("img");
+            modal_image.classList.add("card-img");
+            modal_image.setAttribute("src",section.image);
+            
+            modal_content.append(modal_image);
+        }
+
         
         let modal_body= document.createElement("div");
         modal_body.classList.add("modal-body");
@@ -310,6 +327,14 @@ class viewCardline {
             modal_header.append(modal_header_title);
 
             modal_content.append(modal_header);
+        }
+
+        if (question.image) {
+            let modal_image  = document.createElement("img");
+            modal_image.classList.add("card-img");
+            modal_image.setAttribute("src",question.image);
+
+            modal_content.append(modal_image);
         }
 
         let modal_body= document.createElement("div");
