@@ -14,6 +14,7 @@ store: {
                 {
                     "title:"",
                     "text":"",
+                    "image":"",
                     "correct_answers":["",""],
                     "wrong_answers":["",""]
                 }

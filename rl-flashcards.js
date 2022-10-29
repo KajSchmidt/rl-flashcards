@@ -29,6 +29,7 @@ class modelJSON {
         this.controller = controller;
         this.store = {
             "settings":{},
+            "user":{},
             "deck": []
         }
     }
@@ -50,7 +51,11 @@ class modelJSON {
 
     addSection(section) {
         this.store.deck.push(section);
-    }    
+    }
+    
+    addSettings(new_settings) {
+        this.store.settings = new_settings;
+    }
 
 }
 
