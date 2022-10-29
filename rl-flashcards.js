@@ -78,9 +78,30 @@ class viewCardline {
  * ********************** */    
 
     buildSite(deck, settings) { //Meta som anropar de andra byggfunktionerna i ordning
-        this.buildGreeting(settings);
+
+        let setup = {
+            "id":"site_greeting",
+            "text":settings.greeting,
+            "buttons":[
+                {
+                    "text":"Starta testet!",
+                    "type":"success",
+                    "action": () => { this.startTimer(); this.site.toasts.timer.show(); this.openSection("s0", "site_greeting")}
+                }
+            ]
+        };
+        this.buildModal(setup);
+
+        setup = {
+            "id":"site_done",
+            "text":settings.done,
+            "type":"success"
+        };
+        this.buildModal(setup);
+
+
         this.buildFail(settings);
-        this.buildDone(settings);
+
         this.buildDeck(deck, settings);
         this.buildToasts();
         this.buildTimer();
@@ -90,12 +111,10 @@ class viewCardline {
  *  Bygger Modals
  * ********* */   
 
-    buildGreeting(settings) {  //Bygger första modal som öppnas när sidan öppnas
-        let modal_id = "site_greeting";
-
+    buildModal(setup) {
         let modal = document.createElement("div");
         modal.classList.add("modal", "fade");
-        modal.setAttribute("id", modal_id);
+        modal.setAttribute("id", setup.id);
 
         let modal_dialog = document.createElement("div");
         modal_dialog.classList.add("modal-dialog","modal-dialog-centered");
@@ -103,18 +122,21 @@ class viewCardline {
 
         let modal_content = document.createElement("div");
         modal_content.classList.add("modal-content","shadow");
+        if (setup.type) {
+            modal_content.classList.add("text-bg-"+ setup.type);
+        }
         
-        if (settings.title) {
+        if (setup.title) {
             let modal_header = document.createElement("div");
             modal_header.classList.add("modal-header");
-            modal_header.innerHTML=settings.title;
+            modal_header.innerHTML=setup.title;
             modal_content.append(modal_header);
         }
 
-        if (settings.image) {
+        if (setup.image) {
             let modal_image  = document.createElement("img");
             modal_image.classList.add("card-img");
-            modal_image.setAttribute("src",settings.image);
+            modal_image.setAttribute("src",setup.image);
             
             modal_content.append(modal_image);
         }
@@ -122,28 +144,31 @@ class viewCardline {
         
         let modal_body= document.createElement("div");
         modal_body.classList.add("modal-body");
-        modal_body.innerHTML=settings.greeting || "";
+        modal_body.innerHTML=setup.text || "";
         modal_content.append(modal_body);
 
-        let modal_buttons= document.createElement("div");
-        modal_buttons.classList.add("list-group", "list-group-flush");
-        let button = document.createElement("button");
-        button.classList.add("list-group-item","list-group-item-action","list-group-item-success","text-center");
-        button.innerHTML = "Starta testet";
-        button.onclick = event => { this.startTimer(); this.site.toasts.timer.show(); this.openSection("s0", modal_id)};
-        modal_buttons.append(button);
-        modal_content.append(modal_buttons);
-        
+        if (setup.buttons) {
+            let modal_buttons= document.createElement("div");
+            modal_buttons.classList.add("list-group", "list-group-flush");
+
+            for (let button of setup.buttons) {
+                let modal_button = document.createElement("button");
+                modal_button.classList.add("list-group-item","list-group-item-action","list-group-item-"+ button.type,"text-center");
+                modal_button.innerHTML = button.text;
+                modal_button.onclick = event => button.action();
+                modal_buttons.append(modal_button);
+            }
+            modal_content.append(modal_buttons);
+        }
+
       
         modal_dialog.append(modal_content);
         modal.append(modal_dialog);
 
         this.site.body.append(modal);
-        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:false});
-
-        return modal_id;
-
+        this.site.modals[setup.id] = new bootstrap.Modal("#"+ setup.id, {backdrop:false});
     }
+
 
     buildFail(settings) { //Bygger modal som visas vid fel svar
         let modal_id = "site_fail";
@@ -184,45 +209,7 @@ class viewCardline {
         return modal_id;
     }
 
-    buildDone(settings) { //Bygger modal som visas vid alla rätt svar
-        let modal_id = "site_done";
 
-        let modal = document.createElement("div");
-        modal.classList.add("modal", "fade");
-        modal.setAttribute("id", modal_id);
-
-        let modal_dialog = document.createElement("div");
-        modal_dialog.classList.add("modal-dialog","modal-dialog-centered");
-        
-
-        let modal_content = document.createElement("div");
-        modal_content.classList.add("modal-content","shadow","text-bg-success");
-        
-        
-        let modal_body= document.createElement("div");
-        modal_body.classList.add("modal-body");
-        modal_body.innerHTML=settings.done || "";
-        modal_content.append(modal_body);
-
- /*       let modal_buttons= document.createElement("div");
-        modal_buttons.classList.add("list-group", "list-group-flush");
-        let button = document.createElement("button");
-        button.classList.add("list-group-item","list-group-item-action","list-group-item-primary","text-center");
-        button.innerHTML = "Starta frågorna";
-        button.onclick = event => this.openSection("s0", modal_id);
-        modal_buttons.append(button);
-        modal_content.append(modal_buttons);
-*/
-
-
-        modal_dialog.append(modal_content);
-        modal.append(modal_dialog);
-
-        this.site.body.append(modal);
-        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:false});
-
-        return modal_id;
-    }
 
     buildDeck(deck, settings) { //Metafunktion som anropar byggfunktioner för alla sections
         for (let [index, section] of deck.entries()) {

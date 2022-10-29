@@ -1,0 +1,97 @@
+    buildGreeting(settings) {  //Bygger första modal som öppnas när sidan öppnas
+        let modal_id = "site_greeting";
+
+        let modal = document.createElement("div");
+        modal.classList.add("modal", "fade");
+        modal.setAttribute("id", modal_id);
+
+        let modal_dialog = document.createElement("div");
+        modal_dialog.classList.add("modal-dialog","modal-dialog-centered");
+        
+
+        let modal_content = document.createElement("div");
+        modal_content.classList.add("modal-content","shadow");
+        
+        if (settings.title) {
+            let modal_header = document.createElement("div");
+            modal_header.classList.add("modal-header");
+            modal_header.innerHTML=settings.title;
+            modal_content.append(modal_header);
+        }
+
+        if (settings.image) {
+            let modal_image  = document.createElement("img");
+            modal_image.classList.add("card-img");
+            modal_image.setAttribute("src",settings.image);
+            
+            modal_content.append(modal_image);
+        }
+
+        
+        let modal_body= document.createElement("div");
+        modal_body.classList.add("modal-body");
+        modal_body.innerHTML=settings.greeting || "";
+        modal_content.append(modal_body);
+
+        let modal_buttons= document.createElement("div");
+        modal_buttons.classList.add("list-group", "list-group-flush");
+        let button = document.createElement("button");
+        button.classList.add("list-group-item","list-group-item-action","list-group-item-success","text-center");
+        button.innerHTML = "Starta testet";
+        button.onclick = () => { this.startTimer(); this.site.toasts.timer.show(); this.openSection("s0", modal_id)};
+        modal_buttons.append(button);
+        modal_content.append(modal_buttons);
+        
+      
+        modal_dialog.append(modal_content);
+        modal.append(modal_dialog);
+
+        this.site.body.append(modal);
+        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:false});
+
+        return modal_id;
+
+    }
+
+
+    buildDone(settings) { //Bygger modal som visas vid alla rätt svar
+        let modal_id = "site_done";
+
+        let modal = document.createElement("div");
+        modal.classList.add("modal", "fade");
+        modal.setAttribute("id", modal_id);
+
+        let modal_dialog = document.createElement("div");
+        modal_dialog.classList.add("modal-dialog","modal-dialog-centered");
+        
+
+        let modal_content = document.createElement("div");
+        modal_content.classList.add("modal-content","shadow","text-bg-success");
+        
+        
+        let modal_body= document.createElement("div");
+        modal_body.classList.add("modal-body");
+        modal_body.innerHTML=settings.done || "";
+        modal_content.append(modal_body);
+
+ /*       let modal_buttons= document.createElement("div");
+        modal_buttons.classList.add("list-group", "list-group-flush");
+        let button = document.createElement("button");
+        button.classList.add("list-group-item","list-group-item-action","list-group-item-primary","text-center");
+        button.innerHTML = "Starta frågorna";
+        button.onclick = event => this.openSection("s0", modal_id);
+        modal_buttons.append(button);
+        modal_content.append(modal_buttons);
+*/
+
+
+        modal_dialog.append(modal_content);
+        modal.append(modal_dialog);
+
+        this.site.body.append(modal);
+        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:false});
+
+        return modal_id;
+    }
+
+
