@@ -135,3 +135,81 @@
     }
 
 
+
+
+    buildSection(section, section_index, settings) { //Bygger första modal för varje section + anropar byggfunktionen för varje fråga
+        let modal_id = "s" + section_index;
+
+        let modal = document.createElement("div");
+        modal.classList.add("modal", "fade","deck");
+        modal.setAttribute("id", modal_id);
+
+        let modal_dialog = document.createElement("div");
+        modal_dialog.classList.add("modal-dialog","modal-dialog-centered");
+        
+
+        let modal_content = document.createElement("div");
+        modal_content.classList.add("modal-content","shadow");
+        
+        if (section.title) {
+            let modal_header = document.createElement("div");
+            modal_header.classList.add("modal-header");
+            let modal_header_title = document.createElement("h5");
+            modal_header_title.innerHTML = section.title;
+            modal_header.append(modal_header_title);
+
+            modal_content.append(modal_header);
+        }
+
+
+        if (section.image) {
+            let modal_image  = document.createElement("img");
+            modal_image.classList.add("card-img");
+            modal_image.setAttribute("src",section.image);
+            
+            modal_content.append(modal_image);
+        }
+
+        
+        let modal_body= document.createElement("div");
+        modal_body.classList.add("modal-body");
+        modal_body.innerHTML= section.text || "";
+        modal_content.append(modal_body);
+
+        let modal_buttons= document.createElement("div");
+        modal_buttons.classList.add("list-group", "list-group-flush");
+        let button = document.createElement("button");
+        button.classList.add("list-group-item","list-group-item-action","list-group-item-success","text-center");
+        button.innerHTML = "Starta frågorna";
+        button.onclick = event => {this.openQuestion("s"+ section_index +"q0", modal_id );};
+        modal_buttons.append(button);
+        modal_content.append(modal_buttons);
+       
+        
+        modal_dialog.append(modal_content);
+        modal.append(modal_dialog);
+
+        this.site.body.append(modal);
+        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:false});
+        
+        for (let [index, question] of section.questions.entries()) {
+            if (index == section.last_question) {
+                if (section_index == section.last_section) {
+                    this.buildQuestion(question, index, section_index,"site_done", settings);
+                }
+                else {
+                    let next_section = section_index + 1;
+                    this.buildQuestion(question, index, section_index,"s" + next_section, settings);
+                }
+            }
+            else {
+                let question_index = index + 1;
+                this.buildQuestion(question, index, section_index,"s"+section_index+"q"+question_index, settings);
+            }
+            
+        }
+
+        return modal_id;
+    } 
+
+
