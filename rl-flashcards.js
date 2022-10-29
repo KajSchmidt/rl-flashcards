@@ -221,13 +221,13 @@ class viewCardline {
     }
 
 
-    buildDeck(deck, settings) { //Metafunktion som anropar byggfunktioner för alla sections
+    buildDeck(deck) { //Metafunktion som anropar byggfunktioner för alla sections
         for (let [index, section] of deck.entries()) {
             this.buildSection(section, index)
         }
     }
 
-    buildSection(section, section_index, settings) { //Bygger första modal för varje section + anropar byggfunktionen för varje fråga
+    buildSection(section, section_index) { //Bygger första modal för varje section + anropar byggfunktionen för varje fråga
 
         let modal_id = "s" + section_index;
         
@@ -245,22 +245,21 @@ class viewCardline {
         if (section.title) { setup.title = section.title; }
         if (section.image) { setup.image = section.image; }
         this.buildModal(setup);
-        setup = undefined;
 
         
         for (let [index, question] of section.questions.entries()) {
             if (index == section.last_question) {
                 if (section_index == section.last_section) {
-                    this.buildQuestion(question, index, section_index,"site_done", settings);
+                    this.buildQuestion(question, index, section_index,"site_done");
                 }
                 else {
                     let next_section = section_index + 1;
-                    this.buildQuestion(question, index, section_index,"s" + next_section, settings);
+                    this.buildQuestion(question, index, section_index,"s" + next_section);
                 }
             }
             else {
                 let question_index = index + 1;
-                this.buildQuestion(question, index, section_index,"s"+section_index+"q"+question_index, settings);
+                this.buildQuestion(question, index, section_index,"s"+section_index+"q"+question_index);
             }
             
         }
@@ -268,88 +267,54 @@ class viewCardline {
         return modal_id;
     } 
 
-    buildQuestion(question, question_index, section_index, next_index, settings) { //Bygger modal för varje fråga
+    buildQuestion(question, question_index, section_index, next_index) { //Bygger modal för varje fråga
         let modal_id = "s" + section_index + "q" + question_index;
 
-        let modal = document.createElement("div");
-        modal.classList.add("modal", "fade","deck");
-        modal.setAttribute("id", modal_id);
-
-        let modal_dialog = document.createElement("div");
-        modal_dialog.classList.add("modal-dialog","modal-dialog-centered");
+        let setup = {
+            "id":modal_id,
+            "text":question.text,
+            "buttons":[
+                {
+                    "text":"Starta frågorna",
+                    "type":"success",
+                    "action": () => { this.openQuestion("s"+ section_index +"q0", modal_id )}
+                }
+            ]
+        };
+        if (question.title) { setup.title = question.title; }
+        if (question.image) { setup.image = question.image; }
         
 
-        let modal_content = document.createElement("div");
-        modal_content.classList.add("modal-content","shadow");
-        
-        if (question.title) {
-            let modal_header = document.createElement("div");
-            modal_header.classList.add("modal-header");
-            let modal_header_title = document.createElement("h5");
-            modal_header_title.innerHTML = question.title ; 
-            modal_header.append(modal_header_title);
-
-            modal_content.append(modal_header);
-        }
-
-        if (question.image) {
-            let modal_image  = document.createElement("img");
-            modal_image.classList.add("card-img");
-            modal_image.setAttribute("src",question.image);
-
-            modal_content.append(modal_image);
-        }
-
-        let modal_body= document.createElement("div");
-        modal_body.classList.add("modal-body");
-        modal_body.innerHTML = question.text || "";
-
-        let modal_buttons= document.createElement("div");
-        modal_buttons.classList.add("list-group", "list-group-flush");
 
         let button_array = [];
 
         for (let answer of question.correct_answer) {
-            let button = document.createElement("button");
-            button.classList.add("list-group-item","list-group-item-action","list-group-item-primary","text-center");
-            button.innerHTML = answer;
+            let button = {"type":"primary"};
+            button.text = answer;
             if (next_index == "site_done") {
-                button.onclick = event => this.openDone(modal_id);
+                button.action = () => this.openDone(modal_id);
             }
             else if (next_index.length < 4) {
-                button.onclick = event => this.openSection(next_index,modal_id);
+                button.action = () =>  this.openSection(next_index,modal_id);
             }
 
             else {
-                button.onclick = event => this.openQuestion(next_index,modal_id);
+                button.action = () => this.openQuestion(next_index,modal_id);
             }
             button_array.push(button); 
         }
 
         for (let answer of question.wrong_answer) {
-            let button = document.createElement("button");
-            button.classList.add("list-group-item","list-group-item-action","list-group-item-primary","text-center");
-            button.innerHTML = answer;
-            button.onclick = event => this.openFail("s"+ section_index,modal_id);
+            let button = {"type":"primary"};
+            button.text = answer;
+            button.action = () => this.openFail(modal_id);
             button_array.push(button); 
         }
 
         button_array = button_array.sort((a, b) => 0.5 - Math.random());
-        for (let button of button_array) {
-            modal_buttons.append(button);
-        }
+        setup.buttons = button_array;
         
-        
-        modal_content.append(modal_body);
-        modal_content.append(modal_buttons);
-        
-        modal_dialog.append(modal_content);
-        modal.append(modal_dialog);
-
-        this.site.body.append(modal);
-        this.site.modals[modal_id] = new bootstrap.Modal("#"+modal_id, {backdrop:false});
-
-        return modal_id;
+        this.buildModal(setup);
 
     }
 
@@ -423,7 +388,7 @@ class viewCardline {
         this.site.modals[modal_id].show();
     }
 
-    openFail(next_index, close_id) { //Körs när fel svar ges
+    openFail(close_id) { //Körs när fel svar ges
         if (close_id) {
             this.site.modals[close_id].hide();
         }
