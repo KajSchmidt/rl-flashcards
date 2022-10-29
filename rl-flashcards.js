@@ -152,10 +152,15 @@ class viewCardline {
         this.buildModal(setup);
         setup = undefined;
 
-        this.buildDeck(deck, settings);
+        this.buildDeck(deck);
 
-        this.buildToasts();
-        this.buildTimer();
+        this.buildToastContainer();
+
+        setup = {
+            "id":"timer",
+            "title":"TID"
+        };
+        this.buildToast(setup);
     }
 
 /*************
@@ -322,7 +327,7 @@ class viewCardline {
  *  Bygger övriga element
  * ********* */   
 
-    buildToasts() { //Bygger en container för toasts
+    buildToastContainer() { //Bygger en container för toasts
         let toasts = document.createElement("div");
         toasts.classList.add("toast-container","position-fixed", "bottom-0", "end-0","p-3");
         toasts.setAttribute("id", "toasts")
@@ -332,28 +337,40 @@ class viewCardline {
 
     }
 
-    buildTimer() {
-        let timer = document.createElement("div");
-        timer.classList.add("toast","shadow");
-        timer.setAttribute("id", "timer");
+    buildToast(setup) {
+        let toast = document.createElement("div");
+        toast.classList.add("toast","shadow");
+        if (setup.type) {
+            toast.classList.add("text-bg-"+ setup.type);
+        }
 
-        let timer_header = document.createElement("div");
-        timer_header.classList.add("toast-header");
-        timer_header.innerHTML = "TID";
+        if (!setup.id) { 
+            let adhoc_id = "toast" + Math.floor(Math.random() * 100) + 100;
+            setup.id = adhoc_id;
+        }
+        toast.setAttribute("id", setup.id);
 
-        let timer_body = document.createElement("div");
-        timer_body.classList.add("toast-body");
+        if (setup.title) {
+            let toast_header = document.createElement("div");
+            toast_header.classList.add("toast-header");
+            toast_header.innerHTML = setup.title;
+            toast.append(toast_header);
+        }
 
-        timer.append(timer_header);
-        timer.append(timer_body);
 
-        this.site.toast.append(timer);
-        this.site.toasts.timer = new bootstrap.Toast("#timer", {autohide:false});
- 
+        let toast_body = document.createElement("div");
+        toast_body.classList.add("toast-body");
+
+        
+        toast.append(toast_body);
+
+        if (!setup.autohide) { setup.autohide = true; }
+
+        this.site.toast.append(toast);
+        this.site.toasts[setup.id] = new bootstrap.Toast("#"+ setup.id, {autohide:setup.autohide});
     }
 
-
-
+    
 
 /**************************
  * 

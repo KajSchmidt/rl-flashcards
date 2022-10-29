@@ -213,3 +213,27 @@
     } 
 
 
+
+
+
+    buildTimer() {
+        let timer = document.createElement("div");
+        timer.classList.add("toast","shadow");
+        timer.setAttribute("id", "timer");
+
+        let timer_header = document.createElement("div");
+        timer_header.classList.add("toast-header");
+        timer_header.innerHTML = "TID";
+
+        let timer_body = document.createElement("div");
+        timer_body.classList.add("toast-body");
+
+        timer.append(timer_header);
+        timer.append(timer_body);
+
+        this.site.toast.append(timer);
+        this.site.toasts.timer = new bootstrap.Toast("#timer", {autohide:false});
+ 
+    }
+
+

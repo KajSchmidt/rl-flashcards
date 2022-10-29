@@ -27,7 +27,7 @@ store: {
     ]
 }
 
-setup: {
+Modal setup: {
     "id":"",
     "title":"",
     "image":"",
@@ -40,4 +40,13 @@ setup: {
             "action":""
         }
     ]
+}
+
+Toast setup: {
+    "id":"",
+    "title":"",
+    "image":"",
+    "text":"",
+    "type":""
+    "autohide":""
 }
