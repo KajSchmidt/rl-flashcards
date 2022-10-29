@@ -24,3 +24,18 @@ store: {
         }
     ]
 }
+
+setup: {
+    "id":"",
+    "title":"",
+    "image":"",
+    "text":"",
+    "type":"",
+    "buttons":[
+        {
+            "text":"",
+            "type":"",
+            "action":""
+        }
+    ]
+}
