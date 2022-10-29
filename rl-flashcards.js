@@ -28,12 +28,7 @@ class modelJSON {
     constructor(controller) {
         this.controller = controller;
         this.store = {
-            "settings":{
-                "title":"Titel",
-                "greeting":"Välkommen",
-                "fail":"Tyvärr!",
-                "done":"Grattis!",
-            },
+            "settings":{},
             "deck": []
         }
     }
@@ -114,7 +109,7 @@ class viewCardline {
         
         let modal_body= document.createElement("div");
         modal_body.classList.add("modal-body");
-        modal_body.innerHTML=settings.greeting;
+        modal_body.innerHTML=settings.greeting || "";
         modal_content.append(modal_body);
 
         let modal_buttons= document.createElement("div");
