@@ -33,9 +33,7 @@ class modelJSON {
                 "greeting":"Välkommen",
                 "fail":"Tyvärr!",
                 "done":"Grattis!",
-                "restart_at":"section"
             },
-            "user": {},
             "deck": []
         }
     }
