@@ -2,33 +2,12 @@ class RLFlashcards {
     constructor() {
         this.data = new modelJSON(this);
         this.view = new viewCardline(this);
-        this.time = 0;
     }
 
     init() {
         this.data.loadData();
         this.view.buildSite(this.data.getDeck(), this.data.getSettings());
         this.view.openGreeting();
-    }
-
-    startTime() {
-        this.timer = setInterval(this.updateTime, 1000, this);
-    }
-
-    updateTime(scope) {
-        scope.time++;
-    }
-
-    stopTime() {
-        clearInterval(this.timer);
-    }
-
-    getTime() {
-        return this.time;
-    }
-
-    setTime(new_time) {
-        this.time = new_time;
     }
 }
 
@@ -103,10 +82,10 @@ class viewCardline {
         this.data = controller.data;
         this.site= {};
         this.site.body = document.querySelector("body");
-        this.site.container = document.querySelector(".rl_flashcards");
         this.site.modals = {};
         this.site.toast;
         this.site.toasts = {}
+        this.time= 0;
     }
 
 
@@ -125,7 +104,7 @@ class viewCardline {
                 {
                     "text":"Starta testet!",
                     "type":"success",
-                    "action": () => { this.startTimer(); this.site.toasts.timer.show(); this.openSection("s0", "site_greeting")}
+                    "action": () => { this.showTimer(); this.openSection("s0", "site_greeting")}
                 }
             ]
         };
@@ -167,6 +146,7 @@ class viewCardline {
         setup = {
             "id":"timer",
             "title":"TID",
+            "text":0,
             "options":{autohide:false}
         };
         this.buildToast(setup);
@@ -252,7 +232,7 @@ class viewCardline {
                 {
                     "text":"Starta frågorna",
                     "type":"success",
-                    "action": () => { this.openQuestion("s"+ section_index +"q0", modal_id )}
+                    "action": () => { this.openQuestion("s"+ section_index +"q0", modal_id ); this.startTimer()}
                 }
             ]
         };
@@ -398,6 +378,7 @@ class viewCardline {
             this.site.modals[close_id].hide();
         }
 
+        this.stopTimer();
         this.data.setUser("active_section", modal_id);
 
         this.site.modals[modal_id].show();
@@ -442,29 +423,33 @@ class viewCardline {
  *  Funktioner för att styra tidsräknaren
  * 
  * ********************** */ 
+    showTimer() {
+        this.site.toasts.timer.show();
+    }
+
+    hideTimer() {
+        this.site.toasts.timer.hide();
+    }
 
     startTimer() {
-        this.controller.startTime();
-        this.timer = setInterval(this.updateTimer, 100,this);
+        this.timer = setInterval(this.updateTimer, 1000,this);
     }
 
     updateTimer(scope) {
-        let time = scope.controller.getTime();
-        document.querySelector("#timer > .toast-body").innerHTML = time;
+        scope.time++; 
+        document.querySelector("#timer > .toast-body").innerHTML = scope.time;
     }
 
     stopTimer() {
         clearInterval(this.timer);
-        this.controller.stopTime();
     }
 
     resumeTimer() {
-        this.timer = setInterval(this.updateTimer, 100,this);
-        this.controller.startTime();
+        this.timer = setInterval(this.updateTimer, 1000,this);
     }
 
     resetTimer() {
-        this.controller.setTime(0);
+        this.time = 0;
         document.querySelector("#timer > .toast-body").innerHTML = 0;
     }
 
