@@ -31,40 +31,67 @@
             app = new RLFlashcards();
 
             app.data.addSettings({
-                "greeting":"<h5>Välkommen</h5> Det här är ett kunskapstest som går på tid. <h6>Instruktioner</h6> ",
+                "greeting":"<h5>Välkommen</h5> Det här är ett kunskapstest om fåglar som går på tid.<br><br> <h6>Instruktioner</h6> * Testet är uppdelat i två delar <br> * Svarar du fel får du börja om den del du är på <br> * Varje gång du börjar om kommer frågor och svar i en ny ordning ",
                 "fail":"<h3>Fel</h3> Du svarade tyvärr fel på den frågan, men du kan göra ett nytt försök genom att börja om den här delen av testet.",
                 "done":"<h3>Grattis!</h3> Du lyckades svara rätt på alla frågor och klockan har nu stannat."
             });
 
             app.data.addSection({
-                "text":"Äng nu del tre bra omfångsrik kunde tidigare olika tid sin, se samtidigt mjuka annat mot vid rännil dock blev sin, som genom regn hans häst flera plats både mjuka.",
+                "text":"Dags att börjar testet, om du svarar fel kommer du att få börja om härifrån.<br> Men nu till den första delen som handlar om: <h5>Skogshöns<h5>",
                 "questions":[
                     {
-                    "image":"https://www.allaboutbirds.org/news/wp-content/uploads/2020/07/STanager-Shapiro-ML.jpg",
-                    "text":"Löksås ipsum häst sig i och ingalunda kanske groda, samtidigt när nya varit flera kan kanske därmed, ska precis så enligt och vemod trevnadens.",
-                    "correct_answer":["answer1"],
-                    "wrong_answer":["answer2","answer3","answer4"]
+                    "image":"https://alltomjaktochvapen.se/wp-content/uploads/2019/04/Orre_Lyrurus-tetrix.jpg",
+                    "text":"Vilken fågel är det här?",
+                    "correct_answer":["Orre"],
+                    "wrong_answer":["Tjäder","Ripa","Fasan"]
                     },
-                    {"title":"Question2",
-                    "text":"Söka åker miljoner trevnadens ser stora se mjuka söka där stora vid bäckasiner, dimma helt strand björnbär se är fram oss vid omfångsrik.",
-                    "correct_answer":["answer1"],
-                    "wrong_answer":["answer2","answer3","answer4"]
+                    {
+                        "image":"https://jagareforbundet.se/contentassets/7161be5b979e44ff899c23c1159474dd/2561-3302-5.jpg?width=996",
+                        "text":"Vilken fågel är det här?",
+                        "correct_answer":["Tjäder"],
+                        "wrong_answer":["Orre","Ripa","Fasan"]
+                    },
+                    {
+                        "image":"https://bilder.svenskjakt.se/wZaphfI-MLqvpmWA/w:2048/h:1162/q:90/f:avif/https://svenskjakt.se/wp-content/uploads/2017/08/JRDTUNLY34FK5PE.jpg",
+                        "text":"Vilken fågel är det här?",
+                        "correct_answer":["Ripa"],
+                        "wrong_answer":["Orre","Tjäder","Fasan"]
+                    },
+                    {
+                        "image":"https://lurvigt.se/wp-content/uploads/2022/02/fasan.jpg",
+                        "text":"Vilken fågel är det här?",
+                        "correct_answer":["Fasan"],
+                        "wrong_answer":["Orre","Tjäder","Ripa"]
                     }
                 ]
             }); 
 
             app.data.addSection({
-                "text":"Brunsås hwila rännil strand sitt mjuka åker där gör, strand björnbär så hela vad faktor enligt del, vad blivit räv redan brunsås groda dimma.",
+                "text":"Bra jobbat med förra delen, om du svarar fel i fortsättningen så kommer du att får starta om härifrån. <br> Nu tar vi tag i nästa del om: <h5>Vattenfåglar</h5>",
                 "questions":[
-                    {"title":"Question10",
-                    "text":"Samtidigt nu tre träutensilierna denna blivit kanske när fram som, kanske mjuka som varit faktor enligt tiden dunge.",
-                    "correct_answer":["answer1"],
-                    "wrong_answer":["answer2","answer3","answer4"]
+                    {
+                        "image":"https://fageln.se/upload/galleri/g/grasand04_original.jpg",
+                        "text":"Vilken fågel är det här?",
+                        "correct_answer":["Gräsand"],
+                        "wrong_answer":["Svan","Gås","Flamingo"]
                     },
-                    {"title":"Question11",
-                    "text":"Kan björnbär i ordningens stig ser plats, dimma gör färdväg sällan björnbär sax, sitt sin som enligt hwila. ",
-                    "correct_answer":["answer1"],
-                    "wrong_answer":["answer2","answer3","answer4"]
+                    {
+                        "image":"https://www.mitti.se/_internal/cimg!0/jkdepmjeuvo784let4bhepfwpk2t0pe.jpeg",
+                        "text":"Vilken fågel är det här?",
+                        "correct_answer":["Svan"],
+                        "wrong_answer":["Gräsand","Gås","Flamingo"]
+                    },
+                    {
+                        "image":"https://www.jagarexamenonline.se/images/quiz_images/blasgas_stor@2x.jpg",
+                        "text":"Vilken fågel är det här?",
+                        "correct_answer":["Gås"],
+                        "wrong_answer":["Gräsand","Svan","Flamingo"]
+                    },
+                    {
+                        "image":"https://www.parkenzoo.se/app/uploads/flamingo-1.jpg",
+                        "text":"Vilken fågel är det här?",
+                        "correct_answer":["Flamingo"],
+                        "wrong_answer":["Gräsand","Svan","Gås"]
                     }
                 ]
             }); 
