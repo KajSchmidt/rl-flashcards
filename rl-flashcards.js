@@ -383,7 +383,7 @@ class viewCardline {
             this.site.modals[close_id].hide();
         }
 
-        this.stopTimer();
+        this.stopTimer("paus");
         this.data.setUser("active_section", modal_id);
 
         this.site.modals[modal_id].show();
@@ -415,7 +415,7 @@ class viewCardline {
     }
 
     openDone(close_id) { //Körs vid alla rätta svar
-        this.stopTimer();
+        this.stopTimer("done");
         if (close_id) {
             this.site.modals[close_id].hide();
         }
@@ -438,15 +438,23 @@ class viewCardline {
 
     startTimer() {
         this.timer = setInterval(this.updateTimer, 1000,this);
+        this.updateToast("timer", {"title":"TID","class":"warning"});
     }
 
     updateTimer(scope) {
         scope.time++; 
-        document.querySelector("#timer > .toast-body").innerHTML = scope.time;
+        scope.updateToast("timer", {"text": scope.time});
     }
 
-    stopTimer() {
+    stopTimer(state) {
         clearInterval(this.timer);
+        if (state == "paus") {
+            this.updateToast("timer", {"title":"TID (PAUS)","class":"light"});
+        }
+        else if (state == "done") {
+            this.updateToast("timer", {"title":"TID (Klar)","class":"success"})
+        }
+        
     }
 
     resumeTimer() {
@@ -468,6 +476,35 @@ class viewCardline {
         for (let card of document.querySelectorAll(".deck")) {
             card.remove();
         }
+    }
+
+    updateToast(id, setup) {
+        if (setup.class) {
+            let toast = document.querySelector("#"+ id);
+            if (toast) {
+                for (let eclass of toast.classList) {
+                    if (eclass.includes("text-bg-")) {
+                        toast.classList.remove(eclass);
+                    }
+                }
+                toast.classList.add("text-bg-"+ setup.class);
+            }
+        }
+
+        if (setup.title) {
+            let toast_title = document.querySelector("#"+ id + "> .toast-header");
+            if (toast_title) {
+                toast_title.innerHTML = setup.title;
+            }
+        }
+
+        if (setup.text) {
+            let toast_body = document.querySelector("#"+ id + "> .toast-body");
+            if (toast_body) {
+                toast_body.innerHTML = setup.text;
+            }
+        }  
+
     }
 
 }
