@@ -160,6 +160,9 @@ class viewCardline {
         let modal = document.createElement("div");
         modal.classList.add("modal", "fade");
         modal.setAttribute("id", setup.id);
+        if (setup.class) {
+            modal.classList.add(setup.class);
+        }
 
         let modal_dialog = document.createElement("div");
         modal_dialog.classList.add("modal-dialog","modal-dialog-centered");
@@ -228,6 +231,7 @@ class viewCardline {
         let setup = {
             "id":modal_id,
             "text":section.text,
+            "class":"deck",
             "buttons":[
                 {
                     "text":"Starta frågorna",
@@ -267,6 +271,7 @@ class viewCardline {
         let setup = {
             "id":modal_id,
             "text":question.text,
+            "class":"deck",
             "buttons":[
                 {
                     "text":"Starta frågorna",
@@ -399,9 +404,9 @@ class viewCardline {
             this.site.modals[close_id].hide();
         }
         
-        this.controller.data.shuffleQuestions();
+        this.data.shuffleQuestions();
         this.destroyDeck();
-        this.buildDeck(this.controller.data.store.deck, this.controller.data.store.settings);
+        this.buildDeck(this.data.getDeck());
         this.site.modals["site_fail"].show();
     }
 
