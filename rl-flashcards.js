@@ -484,7 +484,7 @@ class viewCardline {
             if (toast) {
                 for (let item of toast.classList) {
                     if (item.includes("text-bg-")) {
-                        toast.classList.remove(eclass);
+                        toast.classList.remove(item);
                     }
                 }
                 toast.classList.add("text-bg-"+ setup.type);
