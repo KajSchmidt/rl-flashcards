@@ -438,7 +438,7 @@ class viewCardline {
 
     startTimer() {
         this.timer = setInterval(this.updateTimer, 1000,this);
-        this.updateToast("timer", {"title":"TID","class":"warning"});
+        this.updateToast("timer", {"title":"TID","type":"warning"});
     }
 
     updateTimer(scope) {
@@ -449,10 +449,10 @@ class viewCardline {
     stopTimer(state) {
         clearInterval(this.timer);
         if (state == "paus") {
-            this.updateToast("timer", {"title":"TID (PAUS)","class":"light"});
+            this.updateToast("timer", {"title":"TID (PAUS)","type":"light"});
         }
         else if (state == "done") {
-            this.updateToast("timer", {"title":"TID (Klar)","class":"success"})
+            this.updateToast("timer", {"title":"TID (Klar)","type":"success"})
         }
         
     }
@@ -479,15 +479,15 @@ class viewCardline {
     }
 
     updateToast(id, setup) {
-        if (setup.class) {
+        if (setup.type) {
             let toast = document.querySelector("#"+ id);
             if (toast) {
-                for (let eclass of toast.classList) {
-                    if (eclass.includes("text-bg-")) {
+                for (let item of toast.classList) {
+                    if (item.includes("text-bg-")) {
                         toast.classList.remove(eclass);
                     }
                 }
-                toast.classList.add("text-bg-"+ setup.class);
+                toast.classList.add("text-bg-"+ setup.type);
             }
         }
 
