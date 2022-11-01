@@ -146,6 +146,7 @@ class viewCardline {
         setup = {
             "id":"timer",
             "title":"TID",
+            "body_class":"text-timer",
             "text":0,
             "options":{autohide:false}
         };
@@ -355,7 +356,7 @@ class viewCardline {
         let toast_body = document.createElement("div");
         toast_body.classList.add("toast-body");
         if (setup.body_class) {
-            toast_body.classList.add("text-bg-"+ setup.body_class);
+            toast_body.classList.add(setup.body_class);
         }
         toast_body.innerHTML = setup.text;
         toast.append(toast_body);
