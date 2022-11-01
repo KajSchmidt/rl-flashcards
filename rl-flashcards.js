@@ -404,6 +404,7 @@ class viewCardline {
             this.site.modals[close_id].hide();
         }
         
+        this.stopTimer("paus");
         this.data.shuffleQuestions();
         this.destroyDeck();
         this.buildDeck(this.data.getDeck());
