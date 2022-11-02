@@ -375,7 +375,31 @@ class viewCardline {
  *  Bygger övriga element
  * ********* */   
 
+   buildNavbar() {
+    let navbar = document.createElement("nav");
+    navbar.classList.add("navbar","sticky-top", "navbar-dark", "text-bg-dark");
 
+    let navbar_container = document.createElement("div");
+    navbar_container.classList.add("container-fluid","mh-100");
+
+    let navbar_brand = document.createElement("div");
+    navbar_brand.classList.add("navbar-user-box");
+
+
+    let navbar_user_image = document.createElement("img");
+    navbar_user_image.setAttribute("src", "https://www.womensfestival.eu/wp-content/uploads/2016/04/image-placeholder.jpg");
+    navbar_user_image.classList.add("navbar-user-img","float-start","rounded-circle");
+    navbar_brand.append(navbar_user_image);
+    
+    let navbar_user_name = document.createElement("span");
+    navbar_user_name.classList.add("px-4", "fs-6");
+    navbar_user_name.innerHTML = "Anonym";
+    navbar_brand.append(navbar_user_name);
+    
+    navbar_container.append(navbar_brand);
+    navbar.append(navbar_container);
+    this.site.body.append(navbar);
+}
 
   
 
