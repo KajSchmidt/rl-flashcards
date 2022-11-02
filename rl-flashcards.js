@@ -97,7 +97,7 @@ class viewCardline {
 
     buildSite(deck, settings) { //Meta som anropar de andra byggfunktionerna i ordning
 
-        this.buildNavbar();
+        //this.buildNavbar();
 
 
         let setup = {
