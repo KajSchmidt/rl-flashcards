@@ -97,6 +97,9 @@ class viewCardline {
 
     buildSite(deck, settings) { //Meta som anropar de andra byggfunktionerna i ordning
 
+        this.buildNavbar();
+
+
         let setup = {
             "id":"site_greeting",
             "text":settings.greeting,
@@ -319,7 +322,7 @@ class viewCardline {
     }
 
 /*************
- *  Bygger övriga element
+ *  Bygger Toast element
  * ********* */   
 
     buildToastContainer() { //Bygger en container för toasts
@@ -331,6 +334,7 @@ class viewCardline {
         this.site.toast = toasts;
 
     }
+    
 
     buildToast(setup) {
         let toast = document.createElement("div");
@@ -367,7 +371,13 @@ class viewCardline {
         return this.site.toasts[setup.id];
     }
 
-    
+  /*************
+ *  Bygger övriga element
+ * ********* */   
+
+
+
+  
 
 /**************************
  * 
@@ -421,6 +431,14 @@ class viewCardline {
 
     openDone(close_id) { //Körs vid alla rätta svar
         this.stopTimer("done");
+
+        if (!this.data.getUser("best_time")) {
+            this.data.setUser("best_time", this.time);
+        }
+        else if (!this.data.getUser("best_time") > this.time) {
+            this.data.setUser("best_time", this.time);
+        }
+
         if (close_id) {
             this.site.modals[close_id].hide();
         }

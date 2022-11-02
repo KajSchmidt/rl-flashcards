@@ -15,3 +15,9 @@
     font-family: 'Audiowide', cursive; 
     text-align: center;
 }
+
+.navbar-user-img {
+    height: 30px;
+    max-height: 30px;
+}
+
