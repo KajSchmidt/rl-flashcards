@@ -16,8 +16,18 @@ class modelJSON {
         this.controller = controller;
         this.store = {
             "settings":{},
-            "user":{"active_section":""},
+            "user":{},
             "deck": []
+        }
+
+        if (!localStorage.getItem("user")) {
+            this.store.user = {
+                "name":"Anonym",
+                "image": "https://www.womensfestival.eu/wp-content/uploads/2016/04/image-placeholder.jpg"
+            }
+        }
+        else {
+            this.store.user = localStorage.getItem("user");
         }
     }
 
@@ -68,6 +78,7 @@ class modelJSON {
 
     setUser(target, value) {
         this.store.user[target] = value;
+        localStorage.setItem("user", this.store.user);
     }
 
     setSetting(target, value) {
