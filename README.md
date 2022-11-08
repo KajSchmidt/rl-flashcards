@@ -1,4 +1,4 @@
-# rogue-lite-flashcards
+# Rogue Lite Flashcards
 
 
 ### Datastrukturer
