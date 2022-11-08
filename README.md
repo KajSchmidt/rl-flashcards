@@ -1,22 +1,23 @@
 # Rogue Lite Flashcards
 
+## Dokumentation
 
 ### Datastrukturer
 
 #### Data Store
 
 {
-    settings: {
+    "settings": {
         "title":"",
         "image":"",
         "greeting":"",
         "fail":"",
         "done":""
     }
-    user: {
+    "user": {
         "active_section":""
     }
-    deck: [
+    "deck": [
         {
             "title": "",
             "text": "",
