@@ -20,15 +20,15 @@ class modelJSON {
             "deck": []
         }
 
-        /* if (!localStorage.getItem("user")) {
+        if (!localStorage.user) {
             this.store.user = {
                 "name":"Anonym",
-                "image": "https://www.womensfestival.eu/wp-content/uploads/2016/04/image-placeholder.jpg"
+                "image": "https://www.womensfestival.eu/wp-content/uploads/2016/04/image-placeholder.jpg",
             }
         }
         else {
-            this.store.user = localStorage.getItem("user");
-        } */
+            this.store.user = JSON.parse(localStorage.user);
+        } 
     }
 
     loadData() {
@@ -78,7 +78,7 @@ class modelJSON {
 
     setUser(target, value) {
         this.store.user[target] = value;
-        //localStorage.setItem("user", this.store.user);
+        localStorage.user = JSON.stringify(this.store.user);
     }
 
     setSetting(target, value) {
