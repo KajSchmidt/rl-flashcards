@@ -85,6 +85,11 @@ class modelJSON {
         this.store.settings[target] = value;
     }
 
+    clearUser() {
+        this.store.user = {};
+        localStorage.removeItem("user");
+    }
+
 }
 
 class viewCardline {
@@ -165,6 +170,9 @@ class viewCardline {
             "options":{autohide:false}
         };
         this.buildToast(setup);
+
+
+        this.buildUserBox(this.data.getUser());
     }
 
 /*************
@@ -390,30 +398,35 @@ class viewCardline {
  *  Bygger övriga element
  * ********* */   
 
-   buildNavbar() {
-    let navbar = document.createElement("nav");
-    navbar.classList.add("navbar","sticky-top", "navbar-dark", "text-bg-dark");
+   buildUserBox(setup) {
 
-    let navbar_container = document.createElement("div");
-    navbar_container.classList.add("container-fluid","mh-100");
+    let box_container = document.createElement("div");
+    box_container.setAttribute("id", "userbox-container")
+    box_container.classList.add("position-absolut", "top-0","start-0","text-bg-warning");
 
-    let navbar_brand = document.createElement("div");
-    navbar_brand.classList.add("navbar-user-box");
+    let box_image = document.createElement("div");
+    box_image.style.backgroundImage = "url('"+ setup.image +"')";
+    box_image.classList.add("userbox-image", "rounded-circle");
+    box_image.innerHTML = " ";
+    box_container.append(box_image);
+
+    let box_name = document.createElement("span");
+    box_name.classList.add("fs-6");
+    box_name.innerHTML = setup.name;
+    box_container.append(box_name);
+
+    if (setup.best_time) {
+        let box_stats = document.createElement("span");
+        box_stats.classList.add();
+        box_stats.innerHTML = "Bästa tid: "+ setup.best_time +"s";
+        box_container.append(box_stats);
+    }
 
 
-    let navbar_user_image = document.createElement("img");
-    navbar_user_image.setAttribute("src", "https://www.womensfestival.eu/wp-content/uploads/2016/04/image-placeholder.jpg");
-    navbar_user_image.classList.add("navbar-user-img","float-start","rounded-circle");
-    navbar_brand.append(navbar_user_image);
-    
-    let navbar_user_name = document.createElement("span");
-    navbar_user_name.classList.add("px-4", "fs-6");
-    navbar_user_name.innerHTML = "Anonym";
-    navbar_brand.append(navbar_user_name);
-    
-    navbar_container.append(navbar_brand);
-    navbar.append(navbar_container);
-    this.site.body.append(navbar);
+
+
+ 
+    this.site.body.append(box_container);
 }
 
   
