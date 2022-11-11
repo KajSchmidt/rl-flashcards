@@ -475,7 +475,7 @@ class viewCardline {
             this.data.setUser("best_time", this.time);
             this.addToast({"title":"Bästa tid","text":"Grattis, din bästa tid är nu " + this.time +" sekunder!"})
         }
-        else if (!this.data.getUser("best_time") > this.time) {
+        else if (this.data.getUser("best_time") > this.time) {
             this.data.setUser("best_time", this.time);
             this.addToast({"title":"Ny bästa tid","text":"Grattis, din bästa tid är nu " + this.time +" sekunder!"})
         }
