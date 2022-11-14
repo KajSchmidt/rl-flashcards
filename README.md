@@ -43,13 +43,15 @@
     "image":"",
     "text":"",
     "type":"",
+    "size":""
     "buttons":[
         {
             "text":"",
             "type":"",
             "action":""
         }
-    ]
+    ],
+    options:{}
 }
 
 #### Toast Setup

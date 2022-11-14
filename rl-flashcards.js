@@ -178,6 +178,8 @@ class viewCardline {
 
         this.buildUserBox(this.data.getUser());
 
+        this.buildSettingsModal();
+
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
     }
@@ -196,6 +198,10 @@ class viewCardline {
 
         let modal_dialog = document.createElement("div");
         modal_dialog.classList.add("modal-dialog","modal-dialog-centered");
+
+        if (setup.size) {
+            modal_dialog.classList.add(setup.size);
+        }
         
 
         let modal_content = document.createElement("div");
@@ -244,7 +250,9 @@ class viewCardline {
         modal.append(modal_dialog);
 
         this.site.body.append(modal);
-        this.site.modals[setup.id] = new bootstrap.Modal("#"+ setup.id, {backdrop:false});
+
+        if (!setup.options) { setup.options = {backdrop:false}; }
+        this.site.modals[setup.id] = new bootstrap.Modal("#"+ setup.id, setup.options);
     }
 
 
@@ -405,7 +413,7 @@ class viewCardline {
  *  Bygger övriga element
  * ********* */   
 
-   buildUserBox(setup) {
+    buildUserBox(setup) {
 
     let userbox_container = document.createElement("div");
     userbox_container.setAttribute("id", "userbox-container")
@@ -429,7 +437,7 @@ class viewCardline {
     userbox_settings.setAttribute("data-bs-toggle","tooltip");
     userbox_settings.setAttribute("data-bs-title","Inställningar");
     userbox_settings.innerHTML = "<i class='bi bi-tools'></i>";
-    userbox_settings.onclick = event => {};
+    userbox_settings.onclick = event => { this.openSettings(); };
     userbox_image.append(userbox_settings);
     
     userbox_container.append(userbox_image);
@@ -466,7 +474,23 @@ class viewCardline {
     this.site.body.append(userbox_container);
 }
 
-  
+    buildSettingsModal() {
+        let setup = {};
+        setup.id = "settings";
+        setup.title = "Inställningar";
+        setup.size = "modal-lg";
+        //setup.options = {backdrop:true}
+        setup.buttons = [
+            {
+                "text":"Spara",
+                "type":"success",
+                "action": () => { this.saveSettings(); this.site.modals["settings"].hide(); }
+            }
+        ];
+
+
+        this.buildModal(setup);
+    }
 
 /**************************
  * 
@@ -537,6 +561,10 @@ class viewCardline {
         this.updateUserBox(this.data.getUser());
 
         this.site.modals["site_done"].show();
+    }
+
+    openSettings() {
+        this.site.modals["settings"].show();
     }
 
 
@@ -645,6 +673,10 @@ class viewCardline {
             userbox_stats.innerHTML = " ";
             userbox_stats.classList.add("invisible");
         }
+
+    }
+
+    saveSettings() {
 
     }
 
