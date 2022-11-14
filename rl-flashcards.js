@@ -86,7 +86,11 @@ class modelJSON {
     }
 
     clearUser() {
-        this.store.user = {};
+        delete this.store.user;
+        this.store.user = {
+            "name":"Anonym",
+            "image": "https://www.womensfestival.eu/wp-content/uploads/2016/04/image-placeholder.jpg"
+        }
         localStorage.removeItem("user");
     }
 
@@ -173,6 +177,9 @@ class viewCardline {
 
 
         this.buildUserBox(this.data.getUser());
+
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
     }
 
 /*************
@@ -408,6 +415,23 @@ class viewCardline {
     userbox_image.classList.add("rounded-circle","position-absolute","top-0");
     userbox_image.setAttribute("id","userbox-image")
     userbox_image.innerHTML = " ";
+
+    let userbox_reset = document.createElement("button");
+    userbox_reset.classList.add("badge" ,"rounded-pill","text-bg-danger","border-0")
+    userbox_reset.setAttribute("data-bs-toggle","tooltip");
+    userbox_reset.setAttribute("data-bs-title","Radera användare");
+    userbox_reset.innerHTML = "<i class='bi bi-trash3-fill'></i>";
+    userbox_reset.onclick = event => {this.data.clearUser(); this.updateUserBox(); };
+    userbox_image.append(userbox_reset);
+
+    let userbox_settings = document.createElement("button");
+    userbox_settings.classList.add("badge" ,"rounded-pill","text-bg-warning","border-0","float-end")
+    userbox_settings.setAttribute("data-bs-toggle","tooltip");
+    userbox_settings.setAttribute("data-bs-title","Inställningar");
+    userbox_settings.innerHTML = "<i class='bi bi-tools'></i>";
+    userbox_settings.onclick = event => {};
+    userbox_image.append(userbox_settings);
+    
     userbox_container.append(userbox_image);
 
     let userbox_text = document.createElement("ul");
@@ -601,6 +625,8 @@ class viewCardline {
     }
 
     updateUserBox(setup) {
+        if (!setup) { setup = this.data.getUser() }
+
         if (setup.image) {
             let userbox_image = document.querySelector("#userbox-image");
             userbox_image.style.backgroundImage = "url('"+ setup.image +"')";
@@ -613,6 +639,11 @@ class viewCardline {
             let userbox_stats = document.querySelector("#userbox-text > li:nth-child(2)");
             userbox_stats.innerHTML = "Bästa tid: "+ setup.best_time +"s";
             userbox_stats.classList.remove("invisible");
+        }
+        else {
+            let userbox_stats = document.querySelector("#userbox-text > li:nth-child(2)");
+            userbox_stats.innerHTML = " ";
+            userbox_stats.classList.add("invisible");
         }
 
     }

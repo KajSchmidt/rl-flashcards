@@ -23,9 +23,8 @@
     position: relative;
     top: 0;
     left: 0;
-    opacity: 0.1;
-    cursor: pointer;
-    z-index: 1100;
+    opacity: 0.3;
+    z-index: 1060;
 }
 
 #userbox-container:hover {
