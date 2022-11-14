@@ -400,38 +400,46 @@ class viewCardline {
 
    buildUserBox(setup) {
 
-    let box_container = document.createElement("div");
-    box_container.setAttribute("id", "userbox-container")
+    let userbox_container = document.createElement("div");
+    userbox_container.setAttribute("id", "userbox-container")
 
-    let box_image = document.createElement("div");
-    box_image.style.backgroundImage = "url('"+ setup.image +"')";
-    box_image.classList.add("rounded-circle","position-absolute","top-0");
-    box_image.setAttribute("id","userbox-image")
-    box_image.innerHTML = " ";
-    box_container.append(box_image);
+    let userbox_image = document.createElement("div");
+    userbox_image.style.backgroundImage = "url('"+ setup.image +"')";
+    userbox_image.classList.add("rounded-circle","position-absolute","top-0");
+    userbox_image.setAttribute("id","userbox-image")
+    userbox_image.innerHTML = " ";
+    userbox_container.append(userbox_image);
 
-    let box_text = document.createElement("ul");
-    box_text.setAttribute("id","userbox-text")
-    box_text.classList.add("list-group")
+    let userbox_text = document.createElement("ul");
+    userbox_text.setAttribute("id","userbox-text")
+    userbox_text.classList.add("list-group")
 
-    let box_name = document.createElement("li");
-    box_name.classList.add("list-group-item","list-group-item-success");
-    box_name.innerHTML = setup.name;
-    box_text.append(box_name);
+    let userbox_name = document.createElement("li");
+    userbox_name.classList.add("list-group-item","list-group-item-success");
+    userbox_name.innerHTML = setup.name;
+    userbox_text.append(userbox_name);
+
+    let userbox_stats = document.createElement("li");
+    userbox_stats.classList.add("list-group-item");
 
     if (setup.best_time) {
-        let box_stats = document.createElement("li");
-        box_stats.classList.add("list-group-item");
-        box_stats.innerHTML = "Bästa tid: "+ setup.best_time +"s";
-        box_text.append(box_stats);
+        userbox_stats.innerHTML = "Bästa tid: "+ setup.best_time +"s";
+    }
+    else {
+        userbox_stats.innerHTML = " ";
+        userbox_stats.classList.add("invisible");
     }
 
-    box_container.append(box_text);
+    userbox_text.append(userbox_stats);
 
 
 
- 
-    this.site.body.append(box_container);
+    userbox_container.append(userbox_text);
+
+
+    this.site.userbox = userbox_container;
+
+    this.site.body.append(userbox_container);
 }
 
   
@@ -501,6 +509,9 @@ class viewCardline {
         if (close_id) {
             this.site.modals[close_id].hide();
         }
+
+        this.updateUserBox(this.data.getUser());
+
         this.site.modals["site_done"].show();
     }
 
@@ -589,7 +600,20 @@ class viewCardline {
 
     }
 
-    updateUserBox() {
+    updateUserBox(setup) {
+        if (setup.image) {
+            let userbox_image = document.querySelector("#userbox-image");
+            userbox_image.style.backgroundImage = "url('"+ setup.image +"')";
+        }
+        if (setup.name) {
+            let userbox_name = document.querySelector("#userbox-text > li:first-child");
+            userbox_name.innerHTML = setup.name;
+        }
+        if (setup.best_time) {
+            let userbox_stats = document.querySelector("#userbox-text > li:nth-child(2)");
+            userbox_stats.innerHTML = "Bästa tid: "+ setup.best_time +"s";
+            userbox_stats.classList.remove("invisible");
+        }
 
     }
 
