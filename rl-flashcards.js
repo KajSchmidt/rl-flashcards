@@ -229,7 +229,14 @@ class viewCardline {
         let modal_body= document.createElement("div");
         modal_body.classList.add("modal-body");
         modal_body.innerHTML=setup.text || "";
+
+        if (setup.body) {
+            modal_body.append(setup.body);
+        }
+
         modal_content.append(modal_body);
+
+
 
         if (setup.buttons) {
             let modal_buttons= document.createElement("div");
@@ -479,12 +486,41 @@ class viewCardline {
         setup.id = "settings";
         setup.title = "Inställningar";
         setup.size = "modal-lg";
-        //setup.options = {backdrop:true}
+
+
+        let form = document.createElement("form");
+
+        let form_user_name_text = document.createElement("label");
+        form_user_name_text.classList.add("form-label");
+        form_user_name_text.setAttribute("for", "form_user_name");
+        form_user_name_text.innerHTML = "Namn";
+        form.append(form_user_name_text);
+
+        let form_user_name_input = document.createElement("input");
+        form_user_name_input.classList.add("form-control");
+        form_user_name_input.setAttribute("id", "form_user_name");
+        form_user_name_input.value = this.data.getUser("name");
+        form.append(form_user_name_input);
+
+        let form_user_image_text = document.createElement("label");
+        form_user_image_text.classList.add("form-label");
+        form_user_image_text.setAttribute("for", "form_user_image");
+        form_user_image_text.innerHTML = "Bild (URL)";
+        form.append(form_user_image_text);
+
+        let form_user_image_input = document.createElement("input");
+        form_user_image_input.classList.add("form-control");
+        form_user_image_input.setAttribute("id", "form_user_image");
+        form_user_image_input.value = this.data.getUser("image");
+        form.append(form_user_image_input);
+
+
+        setup.body = form;
         setup.buttons = [
             {
                 "text":"Spara",
                 "type":"success",
-                "action": () => { this.saveSettings(); this.site.modals["settings"].hide(); }
+                "action": () => { this.site.modals["settings"].hide(); this.saveSettings(); }
             }
         ];
 
@@ -677,7 +713,10 @@ class viewCardline {
     }
 
     saveSettings() {
+        this.data.setUser("name", document.querySelector("#form_user_name").value);
+        this.data.setUser("image", document.querySelector("#form_user_image").value);
 
+        this.updateUserBox();
     }
 
 }
