@@ -402,26 +402,31 @@ class viewCardline {
 
     let box_container = document.createElement("div");
     box_container.setAttribute("id", "userbox-container")
-    box_container.classList.add("position-absolut", "top-0","start-0","text-bg-warning");
 
     let box_image = document.createElement("div");
     box_image.style.backgroundImage = "url('"+ setup.image +"')";
-    box_image.classList.add("userbox-image", "rounded-circle");
+    box_image.classList.add("rounded-circle","position-absolute","top-0");
+    box_image.setAttribute("id","userbox-image")
     box_image.innerHTML = " ";
     box_container.append(box_image);
 
-    let box_name = document.createElement("span");
-    box_name.classList.add("fs-6");
+    let box_text = document.createElement("ul");
+    box_text.setAttribute("id","userbox-text")
+    box_text.classList.add("list-group")
+
+    let box_name = document.createElement("li");
+    box_name.classList.add("list-group-item","list-group-item-success");
     box_name.innerHTML = setup.name;
-    box_container.append(box_name);
+    box_text.append(box_name);
 
     if (setup.best_time) {
-        let box_stats = document.createElement("span");
-        box_stats.classList.add();
+        let box_stats = document.createElement("li");
+        box_stats.classList.add("list-group-item");
         box_stats.innerHTML = "Bästa tid: "+ setup.best_time +"s";
-        box_container.append(box_stats);
+        box_text.append(box_stats);
     }
 
+    box_container.append(box_text);
 
 
 
@@ -581,6 +586,10 @@ class viewCardline {
                 toast_body.innerHTML = setup.text;
             }
         }  
+
+    }
+
+    updateUserBox() {
 
     }
 

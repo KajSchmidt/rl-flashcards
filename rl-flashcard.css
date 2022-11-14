@@ -17,14 +17,32 @@
 }
 
 #userbox-container {
-    margin-top: 5px;
-    height: 150px;
-    width: 300px;
+    margin: 15px;
+    height: 100px;
+    width: 100px;
+    position: relative;
+    top: 0;
+    left: 0;
+    opacity: 0.1;
+    cursor: pointer;
+    z-index: 1100;
 }
 
-.userbox-image {
+#userbox-container:hover {
+    opacity: 1.0;
+}
+
+
+#userbox-image {
     background-position: center;
     background-size: cover;
-    height: 75px;
-    width: 75px;
+    height: 100%;
+    width: 100%;
+}
+
+#userbox-text {
+    position: absolute;
+    top: 75%;
+    left: 30%;
+    min-width: 200%;
 }
