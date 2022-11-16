@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="sv">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>RLFlashcards</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+        <style>
+            body {
+                margin: 30px;
+            }
+        </style>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    </head>
+    <body>
+
+        <h1>Sektion</h1>
+        <div class="mb-3">
+            <label for="section_title" class="form-label">Rubrik</label>
+            <input type="test" class="form-control" id="section_title">
+            <div id="emailHelp" class="form-text">Kan lämnas tom</div>
+        </div>
+        <div class="mb-3">
+            <label for="section_text" class="form-label">Text</label>
+            <textarea class="form-control" id="section_text" rows="3"></textarea>
+        </div>
+        <h2>Frågor</h2>
+       
+        <div id="questions"></div>
+        <button onClick="addQuestion()" class="btn btn-primary">Lägg till fråga</button>
+
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+        <script>
+
+
+            function addQuestion() {
+
+                let id = document.querySelector("#questions").childElementCount;
+                id++;
+
+                let question = document.createElement("div");
+                question.classList.add("mb3");
+                question.setAttribute("id","question"+ id);
+
+                let question_title_label = document.createElement("label");
+                question_title_label.classList.add("form-label");
+                question_title_label.setAttribute("for", "question"+ id +"_title");
+                question_title_label.innerHTML="Rubrik";
+                question.append(question_title_label);
+
+                let question_title_input = document.createElement("input");
+                question_title_input.classList.add("form-control");
+                question_title_input.setAttribute("id", "question"+ id +"_title");
+                question.append(question_title_input);
+
+                let question_title_help = document.createElement("div");
+                question_title_help.classList.add("form-text");
+                question_title_help.innerHTML="Kan lämnas tom";
+                question.append(question_title_help);
+
+
+
+
+
+                let question_image_label = document.createElement("label");
+                question_image_label.classList.add("form_label");
+                question_image_label.setAttribute("for", "question"+ id +"_image");
+                question_image_label.innerHTML="Bild (URL)";
+                question.append(question_image_label);
+                
+                let question_image_input = document.createElement("input");
+                question_image_input.classList.add("form-control");
+                question_image_input.setAttribute("id", "question"+ id +"_title");
+                question.append(question_image_input);
+
+                let question_image_help = document.createElement("div");
+                question_image_help.classList.add("form-text");
+                question_image_help.innerHTML="Kan lämnas tom";
+                question.append(question_image_help);
+
+
+
+
+                
+                let question_text_label = document.createElement("label");
+                question_text_label.classList.add("form_label");
+                question_text_label.setAttribute("for", "question"+ id +"_text");
+                question_text_label.innerHTML="Text";
+                question.append(question_text_label);
+                
+                let question_text_input = document.createElement("textarea");
+                question_text_input.classList.add("form-control");
+                question_text_input.setAttribute("id", "question"+ id +"_title");
+                question.append(question_text_input);
+                
+
+                let correct_answer = document.createElement("div");
+                correct_answer.setAttribute("id", "question"+ id +"_ca");
+
+                let correct_answer_label = document.createElement("label");
+                correct_answer_label.innerHTML="Rätt svar";
+                correct_answer.append(correct_answer_label);
+
+                let correct_answer_input = document.createElement("input");
+                correct_answer_input.classList.add("form-control");
+                correct_answer_input.setAttribute("id", "question"+ id +"_ca0");
+                correct_answer.append(correct_answer_input);
+
+                let correct_answer_add_button = document.createElement("button");
+                correct_answer_add_button.classList.add("btn","btn-primary");
+                correct_answer_add_button.innerHTML = "Lägg till ett till rätt svar";
+                correct_answer_add_button.onclick = event => addAnswer("question"+ id +"_ca");
+                correct_answer.append(correct_answer_add_button);
+
+                question.append(correct_answer);
+                
+
+
+                let wrong_answer = document.createElement("div");
+                wrong_answer.setAttribute("id", "question"+ id +"_wa");
+
+                let wrong_answer_label = document.createElement("label");
+                wrong_answer_label.innerHTML="Fel svar";
+                wrong_answer.append(wrong_answer_label);
+
+                let wrong_answer_input = document.createElement("input");
+                wrong_answer_input.classList.add("form-control");
+                wrong_answer_input.setAttribute("id", "question"+ id +"_wa0");
+                wrong_answer.append(wrong_answer_input);
+
+                let wrong_answer_add_button = document.createElement("button");
+                wrong_answer_add_button.classList.add("btn","btn-primary");
+                wrong_answer_add_button.innerHTML = "Lägg till ett till fel svar";
+                wrong_answer_add_button.onclick = event => addAnswer("question"+ id +"_wa");
+
+                wrong_answer.append(wrong_answer_add_button);
+
+                question.append(wrong_answer);
+                
+                
+
+
+                let container = document.querySelector("#questions");
+                container.append(question);
+            }
+
+
+            function addAnswer(target) {
+                let answer_id = document.querySelectorAll("#"+ target +" > input").length;
+                let answer_container = document.querySelector("#"+ target);
+
+                let answer_input = document.createElement("input");
+                answer_input.classList.add("form-control");
+                answer_input.setAttribute("id", "#"+ target + answer_id);
+
+                answer_container.append(answer_input);
+            }
+        </script>
+
+            
+        </body>
+
+</html>
