@@ -454,12 +454,12 @@ class viewCardline {
     userbox_text.classList.add("list-group")
 
     let userbox_name = document.createElement("li");
-    userbox_name.classList.add("list-group-item","list-group-item-success");
+    userbox_name.classList.add("list-group-item","list-group-item-success","fs-5", "fw-bold");
     userbox_name.innerHTML = setup.name;
     userbox_text.append(userbox_name);
 
     let userbox_stats = document.createElement("li");
-    userbox_stats.classList.add("list-group-item");
+    userbox_stats.classList.add("list-group-item","fs-6");
 
     if (setup.best_time) {
         userbox_stats.innerHTML = "Bästa tid: "+ setup.best_time +"s";
