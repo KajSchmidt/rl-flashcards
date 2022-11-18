@@ -18,8 +18,8 @@
         <div class="mb-3">
         <textarea class="form-control mb-3" id="section_output"></textarea>
 
-        <button class="btn btn-primary" onclick="generateJSON()">Generera JSON</button>
-        <button class="btn btn-primary" onclick="">Ladda JSON</button>
+        <button class="btn btn-primary" onclick="generateJSON()">Generera JSON <i class="bi bi-box-arrow-in-up"></i></button>
+        <button class="btn btn-primary" onclick="">Ladda JSON <i class="bi bi-box-arrow-down"></i></button>
         </div>
 
         <h1>Sektion</h1>
@@ -36,7 +36,7 @@
         <h2>Frågor</h2>
        
         <div id="questions" class="mb-3"""></div>
-        <button onClick="addQuestion()" class="btn btn-primary">Lägg till fråga</button>
+        <button onClick="addQuestion()" class="btn btn-primary">Lägg till fråga <i class="bi bi-file-earmark-plus-fill"></i></button>
 
 
 
@@ -51,7 +51,7 @@
                 id++;
 
                 let question = document.createElement("div");
-                question.classList.add("mb3");
+                question.classList.add("p-3","mb-3","border");
                 question.setAttribute("id","question"+ id);
 
                 let question_title_label = document.createElement("label");
@@ -66,7 +66,7 @@
                 question.append(question_title_input);
 
                 let question_title_help = document.createElement("div");
-                question_title_help.classList.add("form-text");
+                question_title_help.classList.add("form-text","mb-3");
                 question_title_help.innerHTML="Kan lämnas tom";
                 question.append(question_title_help);
 
