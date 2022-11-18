@@ -14,6 +14,13 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     </head>
     <body>
+        <h1>Resultat</h1>
+        <div class="mb-3">
+        <textarea class="form-control mb-3" id="section_output"></textarea>
+
+        <button class="btn btn-primary" onclick="generateJSON()">Generera JSON</button>
+        <button class="btn btn-primary" onclick="">Ladda JSON</button>
+        </div>
 
         <h1>Sektion</h1>
         <div class="mb-3">
@@ -25,9 +32,10 @@
             <label for="section_text" class="form-label">Text</label>
             <textarea class="form-control" id="section_text" rows="3"></textarea>
         </div>
+
         <h2>Frågor</h2>
        
-        <div id="questions"></div>
+        <div id="questions" class="mb-3"""></div>
         <button onClick="addQuestion()" class="btn btn-primary">Lägg till fråga</button>
 
 
@@ -74,7 +82,7 @@
                 
                 let question_image_input = document.createElement("input");
                 question_image_input.classList.add("form-control");
-                question_image_input.setAttribute("id", "question"+ id +"_title");
+                question_image_input.setAttribute("id", "question"+ id +"_image");
                 question.append(question_image_input);
 
                 let question_image_help = document.createElement("div");
@@ -94,11 +102,12 @@
                 
                 let question_text_input = document.createElement("textarea");
                 question_text_input.classList.add("form-control");
-                question_text_input.setAttribute("id", "question"+ id +"_title");
+                question_text_input.setAttribute("id", "question"+ id +"_text");
                 question.append(question_text_input);
                 
 
                 let correct_answer = document.createElement("div");
+                correct_answer.classList.add("px-3");
                 correct_answer.setAttribute("id", "question"+ id +"_ca");
 
                 let correct_answer_label = document.createElement("label");
@@ -106,21 +115,22 @@
                 correct_answer.append(correct_answer_label);
 
                 let correct_answer_input = document.createElement("input");
-                correct_answer_input.classList.add("form-control");
+                correct_answer_input.classList.add("form-control","mb-3");
                 correct_answer_input.setAttribute("id", "question"+ id +"_ca0");
                 correct_answer.append(correct_answer_input);
 
-                let correct_answer_add_button = document.createElement("button");
-                correct_answer_add_button.classList.add("btn","btn-primary");
-                correct_answer_add_button.innerHTML = "Lägg till ett till rätt svar";
-                correct_answer_add_button.onclick = event => addAnswer("question"+ id +"_ca");
-                correct_answer.append(correct_answer_add_button);
-
                 question.append(correct_answer);
+
+                let correct_answer_add_button = document.createElement("button");
+                correct_answer_add_button.classList.add("btn","btn-primary","ms-3","mb-3");
+                correct_answer_add_button.innerHTML = "<i class='bi bi-plus-circle-fill'></i>";
+                correct_answer_add_button.onclick = event => addAnswer("question"+ id +"_ca");
+                question.append(correct_answer_add_button);
                 
 
 
                 let wrong_answer = document.createElement("div");
+                wrong_answer.classList.add("px-3");
                 wrong_answer.setAttribute("id", "question"+ id +"_wa");
 
                 let wrong_answer_label = document.createElement("label");
@@ -128,20 +138,17 @@
                 wrong_answer.append(wrong_answer_label);
 
                 let wrong_answer_input = document.createElement("input");
-                wrong_answer_input.classList.add("form-control");
+                wrong_answer_input.classList.add("form-control","mb-3");
                 wrong_answer_input.setAttribute("id", "question"+ id +"_wa0");
                 wrong_answer.append(wrong_answer_input);
 
-                let wrong_answer_add_button = document.createElement("button");
-                wrong_answer_add_button.classList.add("btn","btn-primary");
-                wrong_answer_add_button.innerHTML = "Lägg till ett till fel svar";
-                wrong_answer_add_button.onclick = event => addAnswer("question"+ id +"_wa");
-
-                wrong_answer.append(wrong_answer_add_button);
-
                 question.append(wrong_answer);
                 
-                
+                let wrong_answer_add_button = document.createElement("button");
+                wrong_answer_add_button.classList.add("btn","btn-primary","ms-3","mb-3");
+                wrong_answer_add_button.innerHTML = "<i class='bi bi-plus-circle-fill'></i>";
+                wrong_answer_add_button.onclick = event => addAnswer("question"+ id +"_wa");
+                question.append(wrong_answer_add_button);
 
 
                 let container = document.querySelector("#questions");
@@ -154,10 +161,47 @@
                 let answer_container = document.querySelector("#"+ target);
 
                 let answer_input = document.createElement("input");
-                answer_input.classList.add("form-control");
-                answer_input.setAttribute("id", "#"+ target + answer_id);
+                answer_input.classList.add("form-control","mb-3");
+                answer_input.setAttribute("id", target + answer_id);
 
                 answer_container.append(answer_input);
+            }
+
+
+            function generateJSON() {
+                let output = {};
+
+                if (document.querySelector("#section_title").value) { output.title = document.querySelector("#section_title").value; }
+
+                if (document.querySelector("#section_text").value) { output.text = document.querySelector("#section_text").value; }
+
+                if (document.querySelectorAll("#questions > div")) {
+                    output.questions = [];
+                    for (let input of document.querySelectorAll("#questions > div")){
+                        let question = {
+                            "correct_answers":[],
+                            "wrong_answers":[]
+                        };
+
+                        if (document.querySelector("#"+ input.id + "_title").value) { question.title = document.querySelector("#"+ input.id + "_title").value; }
+                        if (document.querySelector("#"+ input.id + "_image").value) { question.image = document.querySelector("#"+ input.id + "_image").value; }
+                        if (document.querySelector("#"+ input.id + "_text").value) { question.text = document.querySelector("#"+ input.id + "_text").value; }
+                    
+
+                        for (let ca of document.querySelectorAll("#"+ input.id +"_ca > input")) {
+                            question.correct_answers.push(document.querySelector("#"+ ca.id).value);
+                        }
+
+                        for (let wa of document.querySelectorAll("#"+ input.id +"_wa > input")) {
+                            question.wrong_answers.push(document.querySelector("#"+ wa.id).value);
+                        }
+                        
+                        output.questions.push(question);
+                    }
+                }
+
+
+                document.querySelector("#section_output").value = JSON.stringify(output);
             }
         </script>
 
