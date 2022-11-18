@@ -58,6 +58,12 @@
                 question_title_label.classList.add("form-label");
                 question_title_label.setAttribute("for", "question"+ id +"_title");
                 question_title_label.innerHTML="Rubrik";
+
+                let question_title_remove = document.createElement("button");
+                question_title_remove.classList.add("btn","btn-danger", "btn-sm","m-1");
+                question_title_remove.innerHTML = "<i class='bi bi-dash-circle-fill'></i>";
+                question_title_label.append(question_title_remove);
+
                 question.append(question_title_label);
 
                 let question_title_input = document.createElement("input");
@@ -65,19 +71,16 @@
                 question_title_input.setAttribute("id", "question"+ id +"_title");
                 question.append(question_title_input);
 
-                let question_title_help = document.createElement("div");
-                question_title_help.classList.add("form-text","mb-3");
-                question_title_help.innerHTML="Kan lämnas tom";
-                question.append(question_title_help);
-
-
-
 
 
                 let question_image_label = document.createElement("label");
                 question_image_label.classList.add("form_label");
                 question_image_label.setAttribute("for", "question"+ id +"_image");
                 question_image_label.innerHTML="Bild (URL)";
+                let question_image_remove = document.createElement("button");
+                question_image_remove.classList.add("btn","btn-danger", "btn-sm","m-1");
+                question_image_remove.innerHTML = "<i class='bi bi-dash-circle-fill'></i>";
+                question_image_label.append(question_image_remove);
                 question.append(question_image_label);
                 
                 let question_image_input = document.createElement("input");
@@ -165,6 +168,11 @@
                 answer_input.setAttribute("id", target + answer_id);
 
                 answer_container.append(answer_input);
+            }
+
+
+            function addQuestionSection(target, type) {
+                
             }
 
 
