@@ -1,6 +1,6 @@
 class modelFirebase {
     constructor(controller) {
-        this.controller = controller;
+        if (controller) { this.controller = controller; }
         this.store = {
             "settings":{},
             "user":{},
@@ -16,9 +16,15 @@ class modelFirebase {
         else {
             this.store.user = JSON.parse(localStorage.user);
         } 
+
+    }
+
+    register(controller) {
+        this.controller = controller;
     }
 
     loadData() {
+
         for (let section of this.store.deck) {
             section.questions = section.questions.sort((a, b) => 0.5 - Math.random());
             section.last_question = section.questions.length-1;
