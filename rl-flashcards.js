@@ -1,7 +1,19 @@
 class RLFlashcards {
-    constructor() {
-        this.data = new modelJSON(this);
-        this.view = new viewCardline(this);
+    constructor(setup) {
+
+        if(!setup) { var setup = {}; }
+
+        if (setup.data) { 
+            this.data = setup.data; 
+            this.data.register(this);
+        }
+        else { this.data = new modelJSON(this); }
+
+        if (setup.view) { 
+            this.view = setup.view;
+            this.view.register(this);
+        }
+        else { this.view = new viewCardline(this); }
     }
 
     init() {
@@ -13,7 +25,7 @@ class RLFlashcards {
 
 class modelJSON {
     constructor(controller) {
-        this.controller = controller;
+        if (controller) { this.controller = controller; }
         this.store = {
             "settings":{},
             "user":{},
@@ -29,6 +41,10 @@ class modelJSON {
         else {
             this.store.user = JSON.parse(localStorage.user);
         } 
+    }
+
+    register(controller) {
+        this.controller = controller;
     }
 
     loadData() {
@@ -98,8 +114,10 @@ class modelJSON {
 
 class viewCardline {
     constructor(controller) {
-        this.controller = controller;
-        this.data = controller.data;
+        if (controller) {
+            this.controller = controller;
+            this.data = controller.data;
+        }
         this.site= {};
         this.site.body = document.querySelector("body");
         this.site.modals = {};
@@ -108,6 +126,10 @@ class viewCardline {
         this.time= 0;
     }
 
+    register(controller) {
+        this.controller = controller;
+        this.data = controller.data;
+    }
 
 /**************************
  * 
