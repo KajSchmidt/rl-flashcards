@@ -23,23 +23,6 @@
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
         <script src="../rl-flashcards.js"></script>
         <script src="../module/modelFirebase.js"></script>
-        <script type="module">
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
-            import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
-
-            const firebaseApp = initializeApp({databaseURL: "https://gameloop-ca13a-default-rtdb.europe-west1.firebasedatabase.app/"});
-
-            const database = ref(getDatabase(firebaseApp));
-        const database2 = get(child(database,'deck/')).then((snapshot) => {
-            if (snapshot.exists()) {
-                console.log(snapshot.val());
-            } else {
-                console.log("No data available");
-            }
-        }).catch((error) => {
-            console.error(error);
-        });
-        </script>
         <script>
 
             app = new RLFlashcards({data: new modelFirebase()});

@@ -23,14 +23,30 @@ class modelFirebase {
         this.controller = controller;
     }
 
-    loadData() {
+    async loadData() {
 
+        let {initializeApp} = await import("https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js");
+        let { getDatabase, ref, get, child } = await import("https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js");
+
+        const firebaseApp = initializeApp({ databaseURL: this.url });
+
+        const db = ref(getDatabase(firebaseApp));
+        const dbDeck = await get(child(db,'deck/')); 
+        this.store.deck = dbDeck.val();
+
+        const dbSettings = await get(child(db,'settings/')); 
+        this.store.settings = dbSettings.val();
+
+        return Promise.resolve();
+
+    }
+
+    shuffleSections() {
         for (let section of this.store.deck) {
             section.questions = section.questions.sort((a, b) => 0.5 - Math.random());
             section.last_question = section.questions.length-1;
             section.last_section = this.store.deck.length-1;
         }
-
     }
 
     shuffleQuestions() {

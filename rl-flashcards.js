@@ -17,9 +17,10 @@ class RLFlashcards {
     }
 
     init() {
-        this.data.loadData();
-        this.view.buildSite(this.data.getDeck(), this.data.getSettings());
-        this.view.openGreeting();
+        this.data.loadData().then(() => {
+            this.view.buildSite(this.data.getDeck(), this.data.getSettings());
+            this.view.openGreeting();
+        });
     }
 }
 
@@ -47,13 +48,17 @@ class modelJSON {
         this.controller = controller;
     }
 
-    loadData() {
+    async loadData() {
+        //Data är redan laddad med den här modulen
+        return Promise.resolve();
+    }
+
+    shuffleSections() {
         for (let section of this.store.deck) {
             section.questions = section.questions.sort((a, b) => 0.5 - Math.random());
             section.last_question = section.questions.length-1;
             section.last_section = this.store.deck.length-1;
         }
-
     }
 
     shuffleQuestions() {
