@@ -50,11 +50,18 @@ class modelJSON {
 
     async loadData() {
         //Data är redan laddad med den här modulen
+        this.changeDeck(0);
+        
         return Promise.resolve();
     }
 
+    changeDeck(deck_id) {
+        this.store.user.active_deck = deck_id;
+        this.store.deck = this.store.decks[deck_id];
+    }
+
     shuffleQuestions() {
-        for (let section of this.store.deck) {
+        for (let section of this.store.deck.sections) {
             section.questions = section.questions.sort((a, b) => 0.5 - Math.random());
             section.last_question = section.questions.length-1;
             section.last_section = this.store.deck.length-1;
@@ -147,7 +154,7 @@ class viewCardline {
 
     buildSite(deck, settings) { //Meta som anropar de andra byggfunktionerna i ordning
 
-        //this.buildNavbar();
+        this.data.shuffleQuestions();
 
 
         let setup = {

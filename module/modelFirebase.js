@@ -3,8 +3,10 @@ class modelFirebase {
         if (controller) { this.controller = controller; }
         this.store = {
             "settings":{},
-            "user":{},
-            "deck": []
+            "user":{
+                "active_deck":0
+            },
+            "decks": []
         }
 
         if (!localStorage.user) {
@@ -34,6 +36,8 @@ class modelFirebase {
         const dbDecks = await get(child(db,'decks/')); 
         this.store.decks = dbDecks.val();
 
+        this.changeDeck(0);
+
         const dbSettings = await get(child(db,'settings/')); 
         this.store.settings = dbSettings.val();
 
@@ -41,8 +45,13 @@ class modelFirebase {
 
     }
 
+    changeDeck(deck_id) {
+        this.store.user.active_deck = deck_id;
+        this.store.deck = this.store.decks[deck_id];
+    }
+
     shuffleQuestions() {
-        for (let section of this.store.deck) {
+        for (let section of this.store.deck.sections) {
             section.questions = section.questions.sort((a, b) => 0.5 - Math.random());
             section.last_question = section.questions.length-1;
             section.last_section = this.store.deck.length-1;
