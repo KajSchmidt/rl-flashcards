@@ -17,10 +17,12 @@ class RLFlashcards {
     }
 
     init() {
-        this.data.loadData().then(() => {
-            this.view.buildSite(this.data.getDeck(), this.data.getSettings());
-            this.view.openGreeting();
-        });
+        window.onload = () => {
+            this.data.loadData().then(() => {
+                this.view.buildSite(this.data.getDeck(), this.data.getSettings());
+                this.view.openGreeting();
+            });
+        }
     }
 }
 
@@ -135,10 +137,21 @@ class viewCardline {
         }
         this.site= {};
         this.site.body = document.querySelector("body");
+        this.site.head = document.querySelector("head");
         this.site.modals = {};
         this.site.toast;
         this.site.toasts = {}
         this.time= 0;
+
+        this.include({"type":"css","target":"https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"});
+        this.include({"type":"css","target":"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css"});
+ 
+        this.include({"type":"gfont","target":"Audiowide"});
+ 
+        this.include({"type":"script","target":"https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"});
+        this.include({"type":"script","target":"https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"});
+      
+        
     }
 
     register(controller) {
@@ -219,6 +232,41 @@ class viewCardline {
 
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    }
+
+    include(setup) {
+        if (setup.type == "css") {
+            let link_tag = document.createElement("link");
+            link_tag.setAttribute("rel", "stylesheet");
+            link_tag.setAttribute("href", setup.target);
+            this.site.head.prepend(link_tag);
+
+        }
+        else if (setup.type == "script") {
+            let script_tag = document.createElement("script");
+            script_tag.setAttribute("src", setup.target);
+            this.site.body.append(script_tag);
+        }
+        else if (setup.type == "gfont") {
+            let link_tag = "";
+            if (!document.querySelector("link[href*='https://fonts.googleapis.com']")) {
+                link_tag = document.createElement("link");
+                link_tag.setAttribute("rel", "preconnect");
+                link_tag.setAttribute("href", "https://fonts.googleapis.com");
+                this.site.head.prepend(link_tag);
+            }
+            if (!document.querySelector("link[href*='https://fonts.gstatic.com']")) {
+                link_tag = document.createElement("link");
+                link_tag.setAttribute("rel", "preconnect");
+                link_tag.setAttribute("href", "https://fonts.gstatic.com");
+                this.site.head.prepend(link_tag);
+            }
+
+            link_tag = document.createElement("link");
+            link_tag.setAttribute("rel", "stylesheet");
+            link_tag.setAttribute("href", "https://fonts.googleapis.com/css2?family="+ setup.target);
+            this.site.head.prepend(link_tag);
+        }
     }
 
 /*************
