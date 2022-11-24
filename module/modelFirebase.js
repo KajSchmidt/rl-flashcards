@@ -58,10 +58,6 @@ class modelFirebase {
         }
     }
     
-    addSettings(new_settings) {
-        this.store.settings = new_settings;
-    }
-
     getUser(target) {
         if (target) {
             return this.store.user[target];
