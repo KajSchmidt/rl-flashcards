@@ -3,8 +3,10 @@ class modelFirebase {
         if (controller) { this.controller = controller; }
         this.store = {
             "settings":{},
-            "user":{},
-            "deck": []
+            "user":{
+                "active_deck":0
+            },
+            "decks": []
         }
 
         if (!localStorage.user) {
@@ -31,8 +33,10 @@ class modelFirebase {
         const firebaseApp = initializeApp({ databaseURL: this.url });
 
         const db = ref(getDatabase(firebaseApp));
-        const dbDeck = await get(child(db,'deck/')); 
-        this.store.deck = dbDeck.val();
+        const dbDecks = await get(child(db,'decks/')); 
+        this.store.decks = dbDecks.val();
+
+        this.changeDeck(0);
 
         const dbSettings = await get(child(db,'settings/')); 
         this.store.settings = dbSettings.val();
@@ -41,28 +45,19 @@ class modelFirebase {
 
     }
 
-    shuffleSections() {
-        for (let section of this.store.deck) {
+    changeDeck(deck_id) {
+        this.store.user.active_deck = deck_id;
+        this.store.deck = this.store.decks[deck_id];
+    }
+
+    shuffleQuestions() {
+        for (let section of this.store.deck.sections) {
             section.questions = section.questions.sort((a, b) => 0.5 - Math.random());
             section.last_question = section.questions.length-1;
             section.last_section = this.store.deck.length-1;
         }
     }
-
-    shuffleQuestions() {
-        for (let section of this.store.deck) {
-            section.questions = section.questions.sort((a, b) => 0.5 - Math.random());
-        }
-    }
-
-    addSection(section) {
-        this.store.deck.push(section);
-    }
     
-    addSettings(new_settings) {
-        this.store.settings = new_settings;
-    }
-
     getUser(target) {
         if (target) {
             return this.store.user[target];
@@ -72,8 +67,9 @@ class modelFirebase {
         }
     }
 
-    getDeck() {
-        return this.store.deck;
+    getDeck(deck_id) {
+        if (!deck_id) { deck_id = 0 }
+        return this.store.decks[deck_id];
     }
 
     getSettings(target) {

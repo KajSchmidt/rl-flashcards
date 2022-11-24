@@ -30,7 +30,7 @@ class modelJSON {
         this.store = {
             "settings":{},
             "user":{},
-            "deck": []
+            "decks": [],
         }
 
         if (!localStorage.user) {
@@ -50,25 +50,34 @@ class modelJSON {
 
     async loadData() {
         //Data är redan laddad med den här modulen
+        this.changeDeck(0);
+        
         return Promise.resolve();
     }
 
-    shuffleSections() {
-        for (let section of this.store.deck) {
+    changeDeck(deck_id) {
+        this.store.user.active_deck = deck_id;
+        this.store.deck = this.store.decks[deck_id];
+    }
+
+    shuffleQuestions() {
+        for (let section of this.store.deck.sections) {
             section.questions = section.questions.sort((a, b) => 0.5 - Math.random());
             section.last_question = section.questions.length-1;
             section.last_section = this.store.deck.length-1;
         }
     }
 
-    shuffleQuestions() {
-        for (let section of this.store.deck) {
-            section.questions = section.questions.sort((a, b) => 0.5 - Math.random());
-        }
+    addDeck(setup) {
+        this.store.decks.push(setup);
+        let deck_id = this.store.decks.indexOf(setup);
+        this.store.decks[deck_id].sections = [];
+        return deck_id;
     }
 
-    addSection(section) {
-        this.store.deck.push(section);
+    addSection(section, deck_id) {
+        if (!deck_id) { deck_id = 0 }
+        this.store.decks[deck_id].sections.push(section);
     }
     
     addSettings(new_settings) {
@@ -84,8 +93,9 @@ class modelJSON {
         }
     }
 
-    getDeck() {
-        return this.store.deck;
+    getDeck(deck_id) {
+        if (!deck_id) { deck_id = 0 }
+        return this.store.decks[deck_id];
     }
 
     getSettings(target) {
@@ -144,7 +154,7 @@ class viewCardline {
 
     buildSite(deck, settings) { //Meta som anropar de andra byggfunktionerna i ordning
 
-        //this.buildNavbar();
+        this.data.shuffleQuestions();
 
 
         let setup = {
@@ -291,7 +301,7 @@ class viewCardline {
 
 
     buildDeck(deck) { //Metafunktion som anropar byggfunktioner för alla sections
-        for (let [index, section] of deck.entries()) {
+        for (let [index, section] of deck.sections.entries()) {
             this.buildSection(section, index)
         }
     }

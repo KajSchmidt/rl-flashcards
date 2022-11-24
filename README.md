@@ -15,20 +15,33 @@
         "done":""
     },
     "user": {
+        "name":"",
+        "image":"",
+        "best_time":[],
+        "active_deck":"",
         "active_section":""
     },
-    "deck": [
+    "decks": [
         {
-            "title": "",
-            "text": "",
+            "title":"",
             "image":"",
-            "questions": [
+            "greeting":"",
+            "fail":"",
+            "done":"",
+            "sections": [
                 {
-                    "title":"",
-                    "text":"",
+                    "title": "",
+                    "text": "",
                     "image":"",
-                    "correct_answers":["",""],
-                    "wrong_answers":["",""]
+                    "questions": [
+                        {
+                            "title":"",
+                            "text":"",
+                            "image":"",
+                            "correct_answers":["",""],
+                            "wrong_answers":["",""]
+                        }
+                    ]
                 }
             ]
         }
