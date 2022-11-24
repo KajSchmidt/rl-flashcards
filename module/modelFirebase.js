@@ -31,8 +31,8 @@ class modelFirebase {
         const firebaseApp = initializeApp({ databaseURL: this.url });
 
         const db = ref(getDatabase(firebaseApp));
-        const dbDeck = await get(child(db,'deck/')); 
-        this.store.deck = dbDeck.val();
+        const dbDecks = await get(child(db,'decks/')); 
+        this.store.decks = dbDecks.val();
 
         const dbSettings = await get(child(db,'settings/')); 
         this.store.settings = dbSettings.val();
@@ -48,10 +48,6 @@ class modelFirebase {
             section.last_section = this.store.deck.length-1;
         }
     }
-
-    addSection(section) {
-        this.store.deck.push(section);
-    }
     
     addSettings(new_settings) {
         this.store.settings = new_settings;
@@ -66,8 +62,9 @@ class modelFirebase {
         }
     }
 
-    getDeck() {
-        return this.store.deck;
+    getDeck(deck_id) {
+        if (!deck_id) { deck_id = 0 }
+        return this.store.decks[deck_id];
     }
 
     getSettings(target) {
