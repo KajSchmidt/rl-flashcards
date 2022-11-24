@@ -13,10 +13,10 @@
         "greeting":"",
         "fail":"",
         "done":""
-    }
+    },
     "user": {
         "active_section":""
-    }
+    },
     "deck": [
         {
             "title": "",
@@ -24,7 +24,7 @@
             "image":"",
             "questions": [
                 {
-                    "title:"",
+                    "title":"",
                     "text":"",
                     "image":"",
                     "correct_answers":["",""],

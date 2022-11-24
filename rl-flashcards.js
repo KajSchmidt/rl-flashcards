@@ -1,19 +1,32 @@
 class RLFlashcards {
-    constructor() {
-        this.data = new modelJSON(this);
-        this.view = new viewCardline(this);
+    constructor(setup) {
+
+        if(!setup) { var setup = {}; }
+
+        if (setup.data) { 
+            this.data = setup.data; 
+            this.data.register(this);
+        }
+        else { this.data = new modelJSON(this); }
+
+        if (setup.view) { 
+            this.view = setup.view;
+            this.view.register(this);
+        }
+        else { this.view = new viewCardline(this); }
     }
 
     init() {
-        this.data.loadData();
-        this.view.buildSite(this.data.getDeck(), this.data.getSettings());
-        this.view.openGreeting();
+        this.data.loadData().then(() => {
+            this.view.buildSite(this.data.getDeck(), this.data.getSettings());
+            this.view.openGreeting();
+        });
     }
 }
 
 class modelJSON {
     constructor(controller) {
-        this.controller = controller;
+        if (controller) { this.controller = controller; }
         this.store = {
             "settings":{},
             "user":{},
@@ -31,13 +44,21 @@ class modelJSON {
         } 
     }
 
-    loadData() {
+    register(controller) {
+        this.controller = controller;
+    }
+
+    async loadData() {
+        //Data är redan laddad med den här modulen
+        return Promise.resolve();
+    }
+
+    shuffleSections() {
         for (let section of this.store.deck) {
             section.questions = section.questions.sort((a, b) => 0.5 - Math.random());
             section.last_question = section.questions.length-1;
             section.last_section = this.store.deck.length-1;
         }
-
     }
 
     shuffleQuestions() {
@@ -98,8 +119,10 @@ class modelJSON {
 
 class viewCardline {
     constructor(controller) {
-        this.controller = controller;
-        this.data = controller.data;
+        if (controller) {
+            this.controller = controller;
+            this.data = controller.data;
+        }
         this.site= {};
         this.site.body = document.querySelector("body");
         this.site.modals = {};
@@ -108,6 +131,10 @@ class viewCardline {
         this.time= 0;
     }
 
+    register(controller) {
+        this.controller = controller;
+        this.data = controller.data;
+    }
 
 /**************************
  * 
