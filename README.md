@@ -17,6 +17,7 @@
     "user": {
         "name":"",
         "image":"",
+        "best_time":[],
         "active_deck":"",
         "active_section":""
     },
