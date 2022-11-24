@@ -41,17 +41,11 @@ class modelFirebase {
 
     }
 
-    shuffleSections() {
+    shuffleQuestions() {
         for (let section of this.store.deck) {
             section.questions = section.questions.sort((a, b) => 0.5 - Math.random());
             section.last_question = section.questions.length-1;
             section.last_section = this.store.deck.length-1;
-        }
-    }
-
-    shuffleQuestions() {
-        for (let section of this.store.deck) {
-            section.questions = section.questions.sort((a, b) => 0.5 - Math.random());
         }
     }
 

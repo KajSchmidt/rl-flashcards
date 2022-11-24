@@ -30,7 +30,7 @@ class modelJSON {
         this.store = {
             "settings":{},
             "user":{},
-            "deck": []
+            "decks": [],
         }
 
         if (!localStorage.user) {
@@ -53,7 +53,7 @@ class modelJSON {
         return Promise.resolve();
     }
 
-    shuffleSections() {
+    shuffleQuestions() {
         for (let section of this.store.deck) {
             section.questions = section.questions.sort((a, b) => 0.5 - Math.random());
             section.last_question = section.questions.length-1;
@@ -61,14 +61,16 @@ class modelJSON {
         }
     }
 
-    shuffleQuestions() {
-        for (let section of this.store.deck) {
-            section.questions = section.questions.sort((a, b) => 0.5 - Math.random());
-        }
+    addDeck(setup) {
+        this.store.decks.push(setup);
+        let deck_id = this.store.decks.indexOf(setup);
+        this.store.decks[deck_id].sections = [];
+        return deck_id;
     }
 
-    addSection(section) {
-        this.store.deck.push(section);
+    addSection(section, deck_id) {
+        if (!deck_id) { deck_id = 0 }
+        this.store.decks[deck_id].sections.push(section);
     }
     
     addSettings(new_settings) {
@@ -84,8 +86,9 @@ class modelJSON {
         }
     }
 
-    getDeck() {
-        return this.store.deck;
+    getDeck(deck_id) {
+        if (!deck_id) { deck_id = 0 }
+        return this.store.decks[deck_id];
     }
 
     getSettings(target) {
@@ -291,7 +294,7 @@ class viewCardline {
 
 
     buildDeck(deck) { //Metafunktion som anropar byggfunktioner för alla sections
-        for (let [index, section] of deck.entries()) {
+        for (let [index, section] of deck.sections.entries()) {
             this.buildSection(section, index)
         }
     }
