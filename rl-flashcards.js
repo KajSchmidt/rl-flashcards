@@ -172,7 +172,7 @@ class viewCardline {
 
         let setup = {
             "id":"site_greeting",
-            "text":settings.greeting,
+            "text":deck.greeting,
             "buttons":[
                 {
                     "text":"Starta testet!",
@@ -181,14 +181,14 @@ class viewCardline {
                 }
             ]
         };
-        if (settings.title) { setup.title = settings.title; }
-        if (settings.image) { setup.image = settings.image; }
+        if (deck.title) { setup.title = deck.title; }
+        if (deck.image) { setup.image = deck.image; }
         this.buildModal(setup);
         setup = undefined;
 
         setup = {
             "id":"site_fail",
-            "text":settings.fail,
+            "text":deck.fail,
             "type":"danger",
             "buttons":[
                 {
@@ -198,17 +198,17 @@ class viewCardline {
                 }
             ]
         };
-        if (settings.title) { setup.title = settings.title; }
+        if (deck.title) { setup.title = deck.title; }
         this.buildModal(setup);
         setup = undefined;
 
 
         setup = {
             "id":"site_done",
-            "text":settings.done,
+            "text":deck.done,
             "type":"success"
         };
-        if (settings.title) { setup.title = settings.title; }
+        if (deck.title) { setup.title = deck.title; }
         this.buildModal(setup);
         setup = undefined;
 
