@@ -170,7 +170,7 @@ class viewCardline {
         this.data.shuffleQuestions();
 
 
-        let setup = {
+        let greeting_setup = {
             "id":"site_greeting",
             "text":deck.greeting,
             "buttons":[
@@ -181,12 +181,11 @@ class viewCardline {
                 }
             ]
         };
-        if (deck.title) { setup.title = deck.title; }
-        if (deck.image) { setup.image = deck.image; }
-        this.buildModal(setup);
-        setup = undefined;
+        if (deck.title) { greeting_setup.title = deck.title; }
+        if (deck.image) { greeting_setup.image = deck.image; }
+        this.buildModal(greeting_setup);
 
-        setup = {
+        let fail_setup = {
             "id":"site_fail",
             "text":deck.fail,
             "type":"danger",
@@ -198,32 +197,29 @@ class viewCardline {
                 }
             ]
         };
-        if (deck.title) { setup.title = deck.title; }
-        this.buildModal(setup);
-        setup = undefined;
+        if (deck.title) { fail_setup.title = deck.title; }
+        this.buildModal(fail_setup);
 
-
-        setup = {
+        let done_setup = {
             "id":"site_done",
             "text":deck.done,
             "type":"success"
         };
-        if (deck.title) { setup.title = deck.title; }
-        this.buildModal(setup);
-        setup = undefined;
+        if (deck.title) { done_setup.title = deck.title; }
+        this.buildModal(done_setup);
 
         this.buildDeck(deck);
 
         this.buildToastContainer();
 
-        setup = {
+        let timer_setup = {
             "id":"timer",
             "title":"TID",
             "body_class":"text-timer",
             "text":0,
             "options":{autohide:false}
         };
-        this.buildToast(setup);
+        this.buildToast(timer_setup);
 
 
         this.buildUserBox(this.data.getUser());
