@@ -8,15 +8,14 @@
 
 {
     "settings": {
-        "title":"",
-        "image":"",
-        "greeting":"",
-        "fail":"",
-        "done":""
+        "title":""
     },
     "user": {
         "name":"",
         "image":"",
+        "progression":{
+
+        },
         "best_time":[],
         "active_deck":"",
         "active_section":""
