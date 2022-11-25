@@ -1,9 +1,9 @@
 {
     "settings": {
-
+        "Title":"Fåglar"
     },
-    "decks": [
-        {
+    "decks": {
+        "fagel":         {
             "greeting":"<h5>Välkommen</h5> Det här är ett kunskapstest om fåglar som går på tid.<br><br> <h6>Instruktioner</h6> * Testet är uppdelat i två delar <br> * Svarar du fel får du börja om den del du är på <br> * Varje gång du börjar om kommer frågor och svar i en ny ordning ",
             "fail":"<h3>Fel</h3> Du svarade tyvärr fel på den frågan, men du kan göra ett nytt försök genom att börja om den här delen av testet.",
             "done":"<h3>Grattis!</h3> Du lyckades svara rätt på alla frågor och klockan har nu stannat.",
@@ -68,5 +68,6 @@
             }
           ]
         }
-    ]
+    }
+
 }

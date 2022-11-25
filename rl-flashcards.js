@@ -64,11 +64,12 @@ class modelJSON {
         this.store.deck = this.store.decks[deck_id];
     }
 
-    shuffleQuestions() {
-        for (let section of this.store.deck.sections) {
+    shuffleQuestions(deck) {
+        if (!deck) { deck = this.getUser("rlf_active_deck"); }
+        for (let section of this.store.decks[deck].sections) {
             section.questions = section.questions.sort((a, b) => 0.5 - Math.random());
             section.last_question = section.questions.length-1;
-            section.last_section = this.store.deck.length-1;
+            section.last_section = this.store.decks[deck].sections.length-1;
         }
     }
 
@@ -86,7 +87,7 @@ class modelJSON {
         this.store.settings = new_settings;
     }
 
-    getUser(target) { //Target är en array med path ex: ["progression","rl_flashcards"]
+    getUser(target) { 
         if (target) {
             if (!this.store.user[target]) { return false; }
             else { return this.store.user[target]; }
@@ -110,7 +111,7 @@ class modelJSON {
         }
     }
 
-    setUser(target, value) { //Target är en array med path ex: ["progression","rl_flashcards"]
+    setUser(target, value) { 
         this.store.user[target] = value;
         localStorage.user = JSON.stringify(this.store.user);
     }
@@ -530,7 +531,7 @@ class viewCardline {
     userbox_reset.setAttribute("data-bs-toggle","tooltip");
     userbox_reset.setAttribute("data-bs-title","Radera användare");
     userbox_reset.innerHTML = "<i class='bi bi-trash3-fill'></i>";
-    userbox_reset.onclick = event => {this.data.clearUser(); this.updateUserBox(); };
+    userbox_reset.onclick = event => {this.data.clearUser(); this.updateUserBox(this.data.getUser()); };
     userbox_image.append(userbox_reset);
 
     let userbox_settings = document.createElement("button");
@@ -556,7 +557,7 @@ class viewCardline {
     userbox_stats.classList.add("list-group-item","fs-6");
 
     if (setup.rlf_best_times[setup.rlf_active_deck]) {
-        userbox_stats.innerHTML = "Bästa tid: "+ setup.rl_fbest_times[setup.rlf_active_deck] +"s";
+        userbox_stats.innerHTML = "Bästa tid: "+ setup.rlf_best_times[setup.rlf_active_deck] +"s";
     }
     else {
         userbox_stats.innerHTML = " ";
@@ -793,7 +794,7 @@ class viewCardline {
             let userbox_name = document.querySelector("#userbox-text > li:first-child");
             userbox_name.innerHTML = setup.name;
         }
-        if (setup.setup.rlf_best_times[setup.rlf_active_deck]) {
+        if (setup.rlf_best_times[setup.rlf_active_deck]) {
             let userbox_stats = document.querySelector("#userbox-text > li:nth-child(2)");
             userbox_stats.innerHTML = "Bästa tid: "+ setup.rlf_best_times[setup.rlf_active_deck] +"s";
             userbox_stats.classList.remove("invisible");

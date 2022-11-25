@@ -3,10 +3,8 @@ class modelFirebase {
         if (controller) { this.controller = controller; }
         this.store = {
             "settings":{},
-            "user":{
-                "active_deck":0
-            },
-            "decks": []
+            "user":{},
+            "decks": {}
         }
 
         if (!localStorage.user) {
@@ -18,6 +16,8 @@ class modelFirebase {
         else {
             this.store.user = JSON.parse(localStorage.user);
         } 
+
+        if (!this.store.user.rlf_best_times) { this.store.user.rlf_best_times = {}; }
 
     }
 
@@ -36,8 +36,8 @@ class modelFirebase {
         const dbDecks = await get(child(db,'decks/')); 
         this.store.decks = dbDecks.val();
 
-        this.changeDeck(0);
-
+        this.changeDeck(Object.keys(this.store.decks)[0]); //Startar automatiskt på första deck i listan
+        
         const dbSettings = await get(child(db,'settings/')); 
         this.store.settings = dbSettings.val();
 
@@ -46,21 +46,23 @@ class modelFirebase {
     }
 
     changeDeck(deck_id) {
-        this.store.user.active_deck = deck_id;
+        this.setUser("rlf_active_deck", deck_id);
         this.store.deck = this.store.decks[deck_id];
     }
 
-    shuffleQuestions() {
-        for (let section of this.store.deck.sections) {
+    shuffleQuestions(deck) {
+        if (!deck) { deck = this.getUser("rlf_active_deck"); }
+        for (let section of this.store.decks[deck].sections) {
             section.questions = section.questions.sort((a, b) => 0.5 - Math.random());
             section.last_question = section.questions.length-1;
-            section.last_section = this.store.deck.length-1;
+            section.last_section = this.store.decks[deck].sections.length-1;
         }
     }
     
-    getUser(target) {
+    getUser(target) { 
         if (target) {
-            return this.store.user[target];
+            if (!this.store.user[target]) { return false; }
+            else { return this.store.user[target]; }
         }
         else {
             return this.store.user;
@@ -68,7 +70,7 @@ class modelFirebase {
     }
 
     getDeck(deck_id) {
-        if (!deck_id) { deck_id = 0 }
+        if (!deck_id) { deck_id = this.getUser("rlf_active_deck"); }
         return this.store.decks[deck_id];
     }
 
@@ -81,7 +83,7 @@ class modelFirebase {
         }
     }
 
-    setUser(target, value) {
+    setUser(target, value) { 
         this.store.user[target] = value;
         localStorage.user = JSON.stringify(this.store.user);
     }
