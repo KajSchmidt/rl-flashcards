@@ -13,12 +13,10 @@
     "user": {
         "name":"",
         "image":"",
-        "progression":{
-
+        "rlf_best_times":{},
+        "rlf_active_deck":"",
+        "rlf_active_section":""
         },
-        "best_time":[],
-        "active_deck":"",
-        "active_section":""
     },
     "decks": [
         {

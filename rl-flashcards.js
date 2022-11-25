@@ -32,18 +32,21 @@ class modelJSON {
         this.store = {
             "settings":{},
             "user":{},
-            "decks": [],
+            "decks": {}
         }
 
         if (!localStorage.user) {
             this.store.user = {
                 "name":"Anonym",
                 "image": "https://www.womensfestival.eu/wp-content/uploads/2016/04/image-placeholder.jpg",
+                "rlf_active_deck":"skogsfagel"
             }
         }
         else {
             this.store.user = JSON.parse(localStorage.user);
         } 
+
+        if (!this.store.user.rlf_best_times) { this.store.user.rlf_best_times = {}; }
     }
 
     register(controller) {
@@ -52,13 +55,13 @@ class modelJSON {
 
     async loadData() {
         //Data är redan laddad med den här modulen
-        this.changeDeck(0);
+        this.changeDeck("skogsfagel");
         
         return Promise.resolve();
     }
 
     changeDeck(deck_id) {
-        this.store.user.active_deck = deck_id;
+        this.setUser("rlf_active_deck", deck_id);
         this.store.deck = this.store.decks[deck_id];
     }
 
@@ -71,24 +74,23 @@ class modelJSON {
     }
 
     addDeck(setup) {
-        this.store.decks.push(setup);
-        let deck_id = this.store.decks.indexOf(setup);
-        this.store.decks[deck_id].sections = [];
-        return deck_id;
+        this.store.decks[setup.id] = setup;
+        this.store.decks[setup.id].sections = [];
+        return setup.id;
     }
 
-    addSection(section, deck_id) {
-        if (!deck_id) { deck_id = 0 }
-        this.store.decks[deck_id].sections.push(section);
+    addSection(setup) {
+        this.store.decks[setup.deck].sections.push(setup);
     }
     
     addSettings(new_settings) {
         this.store.settings = new_settings;
     }
 
-    getUser(target) {
+    getUser(target) { //Target är en array med path ex: ["progression","rl_flashcards"]
         if (target) {
-            return this.store.user[target];
+            if (!this.store.user[target]) { return false; }
+            else { return this.store.user[target]; }
         }
         else {
             return this.store.user;
@@ -96,7 +98,7 @@ class modelJSON {
     }
 
     getDeck(deck_id) {
-        if (!deck_id) { deck_id = 0 }
+        if (!deck_id) { deck_id = this.getUser("rlf_active_deck"); }
         return this.store.decks[deck_id];
     }
 
@@ -109,7 +111,7 @@ class modelJSON {
         }
     }
 
-    setUser(target, value) {
+    setUser(target, value) { //Target är en array med path ex: ["progression","rl_flashcards"]
         this.store.user[target] = value;
         localStorage.user = JSON.stringify(this.store.user);
     }
@@ -167,9 +169,11 @@ class viewCardline {
 
     buildSite(deck, settings) { //Meta som anropar de andra byggfunktionerna i ordning
 
+        //Setup
         this.data.shuffleQuestions();
 
 
+        //Bygg greeting modal
         let greeting_setup = {
             "id":"site_greeting",
             "text":deck.greeting,
@@ -185,6 +189,7 @@ class viewCardline {
         if (deck.image) { greeting_setup.image = deck.image; }
         this.buildModal(greeting_setup);
 
+        //Bygg fail modal
         let fail_setup = {
             "id":"site_fail",
             "text":deck.fail,
@@ -200,6 +205,8 @@ class viewCardline {
         if (deck.title) { fail_setup.title = deck.title; }
         this.buildModal(fail_setup);
 
+
+        //Bygg done modal
         let done_setup = {
             "id":"site_done",
             "text":deck.done,
@@ -208,10 +215,14 @@ class viewCardline {
         if (deck.title) { done_setup.title = deck.title; }
         this.buildModal(done_setup);
 
+
+        //Bygg alla sektions- och frågo-modals
         this.buildDeck(deck);
 
+        //Bygg container där alla toast skapas
         this.buildToastContainer();
 
+        //Bygg timer toast
         let timer_setup = {
             "id":"timer",
             "title":"TID",
@@ -222,10 +233,13 @@ class viewCardline {
         this.buildToast(timer_setup);
 
 
+        //Bygg användarinformationen
         this.buildUserBox(this.data.getUser());
 
+        //Bygg modal för inställningar
         this.buildSettingsModal();
 
+        //Aktiverar tooltips
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
     }
@@ -542,8 +556,8 @@ class viewCardline {
     let userbox_stats = document.createElement("li");
     userbox_stats.classList.add("list-group-item","fs-6");
 
-    if (setup.best_time) {
-        userbox_stats.innerHTML = "Bästa tid: "+ setup.best_time +"s";
+    if (setup.rlf_best_times[setup.rlf_active_deck]) {
+        userbox_stats.innerHTML = "Bästa tid: "+ setup.rl_fbest_times[setup.rlf_active_deck] +"s";
     }
     else {
         userbox_stats.innerHTML = " ";
@@ -628,7 +642,7 @@ class viewCardline {
         }
 
         this.stopTimer("paus");
-        this.data.setUser("active_section", modal_id);
+        this.data.setUser("rlf_active_section", modal_id);
 
         this.site.modals[modal_id].show();
     }
@@ -656,19 +670,19 @@ class viewCardline {
     }
 
     restartSection() {
-        this.openSection(this.data.getUser("active_section"), "site_fail");
+        this.openSection(this.data.getUser("rlf_active_section"), "site_fail");
     }
 
     openDone(close_id) { //Körs vid alla rätta svar
         this.stopTimer("done");
 
-        if (!this.data.getUser("best_time")) {
-            this.data.setUser("best_time", this.time);
-            this.addToast({"title":"Bästa tid","text":"Grattis, din bästa tid är nu " + this.time +" sekunder!"})
-        }
-        else if (this.data.getUser("best_time") > this.time) {
-            this.data.setUser("best_time", this.time);
-            this.addToast({"title":"Ny bästa tid","text":"Grattis, din bästa tid är nu " + this.time +" sekunder!"})
+        let best_times = this.data.getUser("rlf_best_times");
+        let deck_id = this.data.getUser("rlf_active_deck");
+
+        if (!best_times[deck_id] || best_times[deck_id] > this.time) {
+            best_times[deck_id] = this.time
+            this.data.setUser("best_times", best_times);
+            this.addToast({"title":"Bästa tid","text":"Grattis, din bästa tid är nu " + best_times[deck_id] +" sekunder!"})
         }
 
         if (close_id) {
@@ -780,9 +794,9 @@ class viewCardline {
             let userbox_name = document.querySelector("#userbox-text > li:first-child");
             userbox_name.innerHTML = setup.name;
         }
-        if (setup.best_time) {
+        if (setup.setup.rlf_best_times[setup.rlf_active_deck]) {
             let userbox_stats = document.querySelector("#userbox-text > li:nth-child(2)");
-            userbox_stats.innerHTML = "Bästa tid: "+ setup.best_time +"s";
+            userbox_stats.innerHTML = "Bästa tid: "+ setup.rlf_best_times[setup.rlf_active_deck] +"s";
             userbox_stats.classList.remove("invisible");
         }
         else {
