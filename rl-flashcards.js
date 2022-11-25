@@ -38,8 +38,7 @@ class modelJSON {
         if (!localStorage.user) {
             this.store.user = {
                 "name":"Anonym",
-                "image": "https://www.womensfestival.eu/wp-content/uploads/2016/04/image-placeholder.jpg",
-                "rlf_active_deck":"skogsfagel"
+                "image": "https://www.womensfestival.eu/wp-content/uploads/2016/04/image-placeholder.jpg"
             }
         }
         else {
@@ -55,7 +54,7 @@ class modelJSON {
 
     async loadData() {
         //Data är redan laddad med den här modulen
-        this.changeDeck("skogsfagel");
+        this.changeDeck(Object.keys(this.store.decks)[0]); //Startar automatiskt på första deck i listan
         
         return Promise.resolve();
     }
