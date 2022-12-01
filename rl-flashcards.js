@@ -74,13 +74,9 @@ class modelJSON {
     }
 
     addDeck(setup) {
+        if (!setup.id) { setup.id = "deck" + Object.keys(this.store.decks).length; }
         this.store.decks[setup.id] = setup;
-        this.store.decks[setup.id].sections = [];
         return setup.id;
-    }
-
-    addSection(setup) {
-        this.store.decks[setup.deck].sections.push(setup);
     }
     
     addSettings(new_settings) {
