@@ -18,8 +18,8 @@
         "rlf_active_section":""
         },
     },
-    "decks": [
-        {
+    "decks": {
+        "": {
             "title":"",
             "image":"",
             "greeting":"",
@@ -42,7 +42,7 @@
                 }
             ]
         }
-    ]
+    }
 }
 
 #### Modal Setup
